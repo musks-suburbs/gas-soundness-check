@@ -64,6 +64,8 @@ def main():
 
     w3 = connect(args.rpc)
     print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
+    if "Testnet" in network_name(w3.eth.chain_id):
+    print("⚠️  You are connected to a testnet — data may not reflect mainnet activity.")
 
     tx_hash = parse_hash(args.tx_hash)
     start = time.time()
