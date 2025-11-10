@@ -61,7 +61,10 @@ def main():
     parser.add_argument("tx_hash", help="Transaction hash (0x...)")
     parser.add_argument("--rpc", default=RPC_URL, help="RPC endpoint (default from RPC_URL env)")
     args = parser.parse_args()
-
+    
+import socket
+if socket.gethostbyname("ethereum.org"): print("🌍 Internet connection detected.")
+    
     w3 = connect(args.rpc)
     print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
 
