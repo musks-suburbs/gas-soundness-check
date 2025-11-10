@@ -115,6 +115,7 @@ def as_int_or_tag(s: str):
 
 def main():
     args = parse_args()
+    print(f"🔗 Comparing providers:\n   1️⃣ {args.rpc1}\n   2️⃣ {args.rpc2}")
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
