@@ -5,6 +5,10 @@ import time
 import argparse
 from typing import Dict, Any
 from web3 import Web3
+# ✅ Terminal color codes for better readability
+GREEN = "\033[92m"
+RED = "\033[91m"
+RESET = "\033[0m"
 
 DEFAULT_RPC1 = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 DEFAULT_RPC2 = os.getenv("RPC_URL_2", "https://rpc.ankr.com/eth")
