@@ -65,6 +65,9 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
     start = max(0, head - blocks + 1)
     t0 = time.time()
     basefees, eff_prices, tips = [], [], []
+    
+
+    print(f"🔍 Scanning the last {blocks} blocks (every {step}th block)...")
 
     # Iterate backwards in steps for speed
     for n in range(head, start - 1, -step):
@@ -74,6 +77,10 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
         eff_gwei, tip_gwei = sample_block_fees(blk, bf)
         eff_prices.extend(eff_gwei)
         tips.extend(tip_gwei)
+
+        if n % (step * 10) == 0:
+            print(f"   ⏳ At block {n}...")
+
 
     elapsed = time.time() - t0
     return {
