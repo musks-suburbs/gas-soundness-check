@@ -75,7 +75,22 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
         eff_prices.extend(eff_gwei)
         tips.extend(tip_gwei)
 
-    elapsed = time.time() - t0
+      elapsed = time.time() - t0
+
+    # ✅ Handle empty transaction data gracefully
+    if not eff_prices and not tips:
+        print("⚠️  No transactions found in the selected block range. Try increasing --blocks or checking RPC connectivity.")
+        return {
+            "chainId": int(w3.eth.chain_id),
+            "network": network_name(int(w3.eth.chain_id)),
+            "head": head,
+            "sampledBlocks": 0,
+            "blockSpan": blocks,
+            "step": step,
+            "timingSec": round(elapsed, 2),
+            "note": "No transactions found in sampled blocks."
+        }
+
     return {
         "chainId": int(w3.eth.chain_id),
         "network": network_name(int(w3.eth.chain_id)),
