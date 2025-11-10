@@ -139,6 +139,9 @@ def main():
     print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
     print(f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  (n={tp['count']})")
     print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
+if result["effectivePriceGwei"]["count"] < 50:
+    print("⚠️  Warning: Low sample size — results may be inaccurate.")
+
 
 if __name__ == "__main__":
     main()
