@@ -47,14 +47,19 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     chain_id = w3.eth.chain_id
 
     # (2) receipt
-    try:
+   try:
         rcpt = w3.eth.get_transaction_receipt(tx_hash)
     except Exception as e:
         print(f"❌ Failed to fetch receipt: {e}")
         sys.exit(2)
+
+    # ✅ Check if transaction is still pending
     if rcpt is None or rcpt.blockNumber is None:
-        print("⏳ Transaction pending or not found.")
-        sys.exit(0)
+        print("⏳ Transaction is still pending and not yet included in a block.")
+        return {
+            "status": "pending",
+            "txHash": tx_hash,
+        }
         
  # ✅ Calculate gas efficiency (used / limit)
     try:
