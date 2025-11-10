@@ -20,10 +20,16 @@ def network_name(chain_id: int) -> str:
     return NETWORKS.get(chain_id, f"Unknown (chain ID {chain_id})")
 
 def connect(rpc: str) -> Web3:
-    w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 30}))
-    if not w3.is_connected():
-        print("❌ Failed to connect to RPC endpoint.")
-        sys.exit(1)
+      # ✅ New: retry mechanism
+    for attempt in range(3):
+        w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 30}))
+        if w3.is_connected():
+            return w3
+             print(f"⚠️  RPC connection failed (attempt {attempt + 1}/3), retrying...")
+        time.sleep(2)
+    print("❌ Could not connect to RPC after 3 attempts.")
+    sys.exit(1)
+
     return w3
 
 def parse_hash(value: str) -> str:
