@@ -170,6 +170,7 @@ def main():
     if not hashes:
         print("❌ No valid transaction hashes provided.", file=sys.stderr)
         sys.exit(1)
+print(f"🧮 Processing {len(hashes)} transaction hashes...")
 
     w3 = connect(args.rpc)
     latest = int(w3.eth.block_number)
