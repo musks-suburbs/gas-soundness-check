@@ -45,15 +45,33 @@ def fetch_gas_data(w3: Web3, block_tag="latest"):
 
 def fetch_tx_data(w3: Web3, tx_hash: str):
     rcpt = w3.eth.get_transaction_receipt(tx_hash)
-    tx = w3.eth.get_transaction(tx_hash)
-    fee = Web3.from_wei(rcpt.gasUsed * tx.get("maxFeePerGas", tx.gasPrice), "ether")
+
+    # Prefer the actual paid price (EIP-1559); fallback to legacy gasPrice later if needed
+    eff_price = getattr(rcpt, "effectiveGasPrice", None)
+
+    # Try to get from/to directly from the receipt (saves an RPC call on modern nodes)
+    try:
+        tx_from = rcpt["from"]
+        tx_to = rcpt["to"]
+        gas_price_wei = eff_price if eff_price is not None else 0
+    except KeyError:
+        # Fallback: fetch the full transaction only if receipt doesn't carry from/to
+        tx = w3.eth.get_transaction(tx_hash)
+        tx_from = tx["from"]
+        tx_to = tx["to"]
+        gas_price_wei = eff_price if eff_price is not None else (tx.get("gasPrice", 0) or 0)
+
+    fee_eth = Web3.from_wei(rcpt.gasUsed * gas_price_wei, "ether")
+
     return {
-        "from": tx["from"],
-        "to": tx["to"],
+        "from": tx_from,
+        "to": tx_to,
         "status": rcpt.status,
         "gas_used": rcpt.gasUsed,
-        "fee_eth": float(fee),
+        "fee_eth": float(fee_eth),
         "block_number": rcpt.blockNumber,
+    }
+
     }
 
 def main():
