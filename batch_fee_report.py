@@ -166,6 +166,8 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
+     t0 = time.time()
+    print(f"🕒 Batch started at: {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime())}")
     hashes = read_hashes(args.file, args.limit)
     if not hashes:
         print("❌ No valid transaction hashes provided.", file=sys.stderr)
