@@ -117,6 +117,7 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
+    rint(f"📌 Using RPC1: {args.rpc1} | RPC2: {args.rpc2}")
     if not is_tx_hash(args.tx_hash):
         print("❌ Invalid transaction hash format.")
         sys.exit(1)
