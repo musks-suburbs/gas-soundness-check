@@ -63,6 +63,8 @@ def main():
     args = parser.parse_args()
 
     w3 = connect(args.rpc)
+print(f"✔️  Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id}) — proceeding…")
+
     print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
 
     tx_hash = parse_hash(args.tx_hash)
