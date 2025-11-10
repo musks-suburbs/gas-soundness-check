@@ -162,8 +162,9 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--limit", type=int, help="Limit number of hashes read")
     ap.add_argument("--out", help="CSV output path (default: stdout)")
     ap.add_argument("--json", action="store_true", help="Print JSON instead of CSV")
+    ap.add_argument("--summary-only", action="store_true", help="Only display the final summary, skip detailed output")
     return ap.parse_args()
-
+   
 def main():
     args = parse_args()
     hashes = read_hashes(args.file, args.limit)
@@ -181,10 +182,12 @@ def main():
         try:
             row = summarize_tx(w3, h, cache, latest)
             rows.append(row)
+       # ✅ Skip printing each transaction if --summary-only is used
+            if not args.summary_only:
+                print(f"✅ Processed: {h} — Fee {row.get('fee_eth', 0):.6f} ETH", file=sys.stderr)
         except Exception as e:
-            print(f"⚠️  Failed to process {h}: {e}", file=sys.stderr)
-        if i % 10 == 0:
-            print(f"🔍 Processed {i}/{len(hashes)}...", file=sys.stderr)
+            if not args.summary_only:
+                print(f"⚠️  Failed to process {h}: {e}", file=sys.stderr)
 
     if args.json:
         print(json.dumps({
