@@ -167,6 +167,7 @@ def parse_args() -> argparse.Namespace:
 def main():
     args = parse_args()
     hashes = read_hashes(args.file, args.limit)
+    print(f"📋 Will analyze {len(hashes)} transactions from {args.file or 'stdin'}")
     if not hashes:
         print("❌ No valid transaction hashes provided.", file=sys.stderr)
         sys.exit(1)
