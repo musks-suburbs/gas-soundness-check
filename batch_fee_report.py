@@ -196,7 +196,12 @@ def main():
         }, indent=2, sort_keys=True))
     else:
         to_csv(rows, args.out)
-
+ # ✅ Print summary
+    total = len(hashes)
+    success = len(rows)
+    failed = total - success
+    print(f"\n📊 Summary: {success} succeeded, {failed} failed out of {total} total.", file=sys.stderr)
+    
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s", file=sys.stderr)
 
 if __name__ == "__main__":
