@@ -196,7 +196,8 @@ def main():
         }, indent=2, sort_keys=True))
     else:
         to_csv(rows, args.out)
-
+        print(f"📅 Report generated at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
+print(f"⏱️ Batch analysis completed in {round(time.time() - t0, 2)} seconds.")
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s", file=sys.stderr)
 
 if __name__ == "__main__":
