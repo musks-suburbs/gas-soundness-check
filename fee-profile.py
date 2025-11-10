@@ -139,6 +139,8 @@ def main():
     print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
     print(f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  (n={tp['count']})")
     print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
+    avg_base_fee = round(sum(result["baseFeeGwei"].values()) / len(result["baseFeeGwei"]), 3)
+print(f"📈 Average Base Fee (approx): {avg_base_fee} Gwei")
 
 if __name__ == "__main__":
     main()
