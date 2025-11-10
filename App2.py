@@ -78,8 +78,11 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
             gas_price_wei = 0
 
     total_fee_wei = int(rcpt.gasUsed) * int(gas_price_wei or 0)
-
+  # ✅ Compute transaction age in seconds
+    tx_age_seconds = time.time() - block.timestamp
+    tx_age_minutes = tx_age_seconds / 60
     return {
+        "ageMinutes": round(tx_age_minutes, 2),
         "chainId": int(chain_id),
         "network": network_name(int(chain_id)),
         "txHash": tx_hash,
@@ -128,6 +131,7 @@ def main():
     print(f"🎯 To: {summary['to']}")
     print(f"📦 Status: {'✅ Success' if summary['status']==1 else '❌ Failed'}")
     print(f"🔢 Block: {summary['blockNumber']}  🕒 {fmt_utc(summary['timestamp'])} UTC  ✅ Confirmations: {summary['confirmations']}")
+    print(f"🕓 Age: {summary['ageMinutes']} minutes ago")
     print(f"⛽ Gas Used: {summary['gasUsed']}")
     print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary['baseFeeAtTxGwei']:.2f} Gwei)")
     print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
