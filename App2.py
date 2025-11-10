@@ -116,6 +116,7 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 def main():
+     print("\n" + "="*60 + "\n🚀 Starting Gas Soundness Check\n" + "="*60)
     args = parse_args()
     if not is_tx_hash(args.tx_hash):
         print("❌ Invalid transaction hash format.")
