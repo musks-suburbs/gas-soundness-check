@@ -57,6 +57,8 @@ def fetch_tx_data(w3: Web3, tx_hash: str):
     }
 
 def main():
+       import uuid
+    print(f"🧩 Session ID: {str(uuid.uuid4())[:8]}")
     parser = argparse.ArgumentParser(description="Check Ethereum transaction gas soundness.")
     parser.add_argument("tx_hash", help="Transaction hash (0x...)")
     parser.add_argument("--rpc", default=RPC_URL, help="RPC endpoint (default from RPC_URL env)")
