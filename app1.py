@@ -61,6 +61,12 @@ def main():
     parser.add_argument("tx_hash", help="Transaction hash (0x...)")
     parser.add_argument("--rpc", default=RPC_URL, help="RPC endpoint (default from RPC_URL env)")
     args = parser.parse_args()
+    
+from urllib.parse import urlparse
+print(f"🌐 Using RPC provider: {urlparse(args.rpc).netloc}")
+
+w3 = connect(args.rpc)
+print(f"✔️  Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id}) — proceeding…")
 
     w3 = connect(args.rpc)
     print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
