@@ -116,8 +116,9 @@ def as_int_or_tag(s: str):
 def main():
     args = parse_args()
     t0 = time.time()
-    w3a = connect(args.rpc1)
-    w3b = connect(args.rpc2)
+    start = time.time(); w3a = connect(args.rpc1); print(f"⏱️ RPC1 connected in {time.time() - start:.2f}s")
+start = time.time(); w3b = connect(args.rpc2); print(f"⏱️ RPC2 connected in {time.time() - start:.2f}s")
+
 
     if args.tx:
         if not (args.tx.startswith("0x") and len(args.tx) == 66):
