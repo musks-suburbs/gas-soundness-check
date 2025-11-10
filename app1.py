@@ -78,7 +78,10 @@ def main():
     print(f"🔢 Block: {tx_data['block_number']}")
     print(f"⛽ Gas Used: {tx_data['gas_used']}")
     print(f"💰 Fee: {tx_data['fee_eth']:.6f} ETH")
-
+    block = w3.eth.get_block(tx_data["block_number"])
+tx_age_seconds = time.time() - block.timestamp
+minutes = tx_age_seconds / 60
+print(f"🕓 Age: {minutes:.1f} minutes ago")
     if tx_data["fee_eth"] > 0.05:
         print(f"⚠️  High Fee Warning: This transaction cost {tx_data['fee_eth']:.4f} ETH.")
 
