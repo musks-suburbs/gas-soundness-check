@@ -118,6 +118,9 @@ def main():
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
+    print("✅ Both RPC connections established successfully.")
+print(f"📦 RPC1 head block: {w3a.eth.block_number}")
+print(f"📦 RPC2 head block: {w3b.eth.block_number}")
 
     if args.tx:
         if not (args.tx.startswith("0x") and len(args.tx) == 66):
