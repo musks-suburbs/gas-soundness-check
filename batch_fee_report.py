@@ -197,7 +197,8 @@ def main():
     else:
         to_csv(rows, args.out)
 
-    print(f"⏱️  Elapsed: {time.time() - t0:.2f}s", file=sys.stderr)
+   print(f"⏱️  Elapsed: {(time.time() - t0)/60:.2f} min ({time.time() - t0:.2f}s)", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
