@@ -21,10 +21,14 @@ def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
 def connect(url: str) -> Web3:
+    start = time.time()
+    print(f"🔌 Connecting to RPC: {url}")
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": 25}))
+    latency = time.time() - start
     if not w3.is_connected():
         print(f"❌ Failed to connect: {url}")
         sys.exit(1)
+    print(f"⚡ Connected successfully in {latency:.2f}s\n")
     return w3
 
 def tx_commitment(chain_id: int, tx_hash: str, rcpt) -> str:
