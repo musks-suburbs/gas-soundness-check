@@ -118,7 +118,30 @@ def main():
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
+    
+   # ✅ Check if both RPC providers are on the same network
+    net_a = (w3a.eth.chain_id, network_name(w3a.eth.chain_id))
+    net_b = (w3b.eth.chain_id, network_name(w3b.eth.chain_id))
+    if net_a[0] != net_b[0]:
+        print(f"⚠️  Network mismatch detected:")
+        print(f"   RPC1 -> {net_a[1]} (chainId {net_a[0]})")
+        print(f"   RPC2 -> {net_b[1]} (chainId {net_b[0]})")
+        print("❌ Aborting comparison — please use two providers for the same network.")
+        sys.exit(1)
 
+    # ✅ Compare latest block timestamps to detect RPC lag
+    try:
+        latest_a = w3a.eth.get_block("latest")
+        latest_b = w3b.eth.get_block("latest")
+        lag_sec = abs(latest_a.timestamp - latest_b.timestamp)
+        print(f"🕒 RPC1 latest block: {latest_a.number} ({time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(latest_a.timestamp))} UTC)")
+        print(f"🕒 RPC2 latest block: {latest_b.number} ({time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime(latest_b.timestamp))} UTC)")
+        if lag_sec > 30:
+            print(f"⚠️  Providers differ by {lag_sec:.0f} seconds — one may be lagging behind.\n")
+        else:
+            print("✅ RPCs are synchronized within 30 seconds.\n")
+    except Exception as e:
+        print(f"⚠️  Could not fetch latest block timestamps: {e}\n")
     if args.tx:
         if not (args.tx.startswith("0x") and len(args.tx) == 66):
             print("❌ Invalid tx hash.")
