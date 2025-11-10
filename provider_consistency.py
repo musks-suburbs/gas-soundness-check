@@ -172,7 +172,8 @@ def main():
             print("🔒 Soundness confirmed for header across providers.")
         else:
             print("⚠️  Inconsistencies detected. Consider using an exact block number or different providers.")
-
+ # ✅ Show completion timestamp
+    print(f"🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
     print(f"\n⏱️  Elapsed: {time.time() - t0:.2f}s")
 
 if __name__ == "__main__":
