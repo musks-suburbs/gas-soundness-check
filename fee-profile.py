@@ -123,6 +123,10 @@ def main():
         sys.exit(1)
 
     w3 = connect(args.rpc)
+      # ✅ Warn if connected to a testnet or unknown network
+    net_name = network_name(int(w3.eth.chain_id))
+    if "Testnet" in net_name or "Unknown" in net_name:
+        print(f"⚠️  You are connected to {net_name}. Results may differ from mainnet.\n")
     result = analyze(w3, args.blocks, args.step)
 
     if args.json:
