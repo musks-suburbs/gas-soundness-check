@@ -146,6 +146,6 @@ def main():
         print(f"⚠️  High Fee Warning: {summary['totalFeeEth']:.4f} ETH exceeds threshold {args.warn_fee_eth:.4f} ETH.")
 
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
-
+print("✅ Script executed successfully without errors.")
 if __name__ == "__main__":
     main()
