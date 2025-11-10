@@ -122,8 +122,12 @@ def main():
         sys.exit(1)
 
     t0 = time.time()
-    w3 = connect(args.rpc)
-    summary = fetch_tx_summary(w3, args.tx_hash)
+   w3 = connect(args.rpc)
+    print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
+
+    # ✅ Warn user if connected to a testnet or unknown network
+    if "Testnet" in network_name(w3.eth.chain_id) or "Unknown" in network_name(w3.eth.chain_id):
+        print(f"⚠️  You are connected to {network_name(w3.eth.chain_id)}. Double-check your RPC URL before proceeding.\n")
 
     if args.json:
         import json
