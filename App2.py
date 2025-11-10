@@ -116,6 +116,8 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 def main():
+     import datetime
+    print(f"🕒 Local start time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     args = parse_args()
     if not is_tx_hash(args.tx_hash):
         print("❌ Invalid transaction hash format.")
