@@ -154,6 +154,7 @@ def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
         w.writerows(rows)
 
 def parse_args() -> argparse.Namespace:
+        ap.add_argument("--skip-failed", action="store_true", help="Exclude failed or missing transactions from output")
     ap = argparse.ArgumentParser(
         description="Batch analyze transaction fees and efficiency; outputs CSV or JSON."
     )
@@ -178,8 +179,12 @@ def main():
 
     t0 = time.time()
     for i, h in enumerate(hashes, 1):
-        try:
+     try:
             row = summarize_tx(w3, h, cache, latest)
+            # ✅ Skip failed or pending if user enabled --skip-failed
+            if args.skip_failed and row.get("statusText") == "pending_or_not_found":
+                print(f"⏭️  Skipped {h} (pending or missing)", file=sys.stderr)
+                continue
             rows.append(row)
         except Exception as e:
             print(f"⚠️  Failed to process {h}: {e}", file=sys.stderr)
