@@ -116,6 +116,8 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 def main():
+    import platform
+    print(f"📦 Running on Python {platform.python_version()} on {platform.system()}")
     args = parse_args()
     if not is_tx_hash(args.tx_hash):
         print("❌ Invalid transaction hash format.")
