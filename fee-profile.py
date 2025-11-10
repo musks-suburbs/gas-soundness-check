@@ -131,6 +131,7 @@ def main():
         return
 
     print(f"🌐 {result['network']} (chainId {result['chainId']})  head={result['head']}")
+    print(f"📅 Snapshot date (UTC): {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
     print(f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} (step={result['step']}) in {result['timingSec']}s")
     bf = result["baseFeeGwei"]
     ep = result["effectivePriceGwei"]
