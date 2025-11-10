@@ -124,6 +124,9 @@ def main():
 
     w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step)
+    import time
+print(f"⏱️ Analysis completed in {round(time.time() - t0, 2)} seconds.")
+
 
     if args.json:
         import json
