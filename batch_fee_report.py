@@ -170,8 +170,10 @@ def main():
     if not hashes:
         print("❌ No valid transaction hashes provided.", file=sys.stderr)
         sys.exit(1)
+print(f"🔗 Using RPC endpoint: {args.rpc}")
 
     w3 = connect(args.rpc)
+    
     latest = int(w3.eth.block_number)
     cache: Dict[int, Any] = {}
     rows: List[Dict[str, Any]] = []
