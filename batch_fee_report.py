@@ -64,7 +64,10 @@ def safe_call(fn, *args, retries=2, delay=0.8, **kwargs):
             if attempt == retries:
                 raise
             print(f"⚠️  RPC call failed ({e}); retrying {attempt}/{retries-1}...", file=sys.stderr)
-            time.sleep(delay)
+           # ✅ Progressive delay backoff for stability
+            wait = delay * attempt
+            print(f"🕒 Waiting {wait:.1f}s before next retry...", file=sys.stderr)
+            time.sleep(wait)
 
 def tx_type_label(tt) -> str:
     return {0: "Legacy", 1: "AccessList", 2: "EIP-1559"}.get(tt if isinstance(tt, int) else 0, f"Unknown({tt})")
