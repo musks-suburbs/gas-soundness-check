@@ -177,14 +177,17 @@ def main():
     rows: List[Dict[str, Any]] = []
 
     t0 = time.time()
-    for i, h in enumerate(hashes, 1):
+     for i, h in enumerate(hashes, 1):
         try:
             row = summarize_tx(w3, h, cache, latest)
             rows.append(row)
         except Exception as e:
             print(f"⚠️  Failed to process {h}: {e}", file=sys.stderr)
-        if i % 10 == 0:
-            print(f"🔍 Processed {i}/{len(hashes)}...", file=sys.stderr)
+
+        # ✅ Show progress every 10 transactions
+        if i % 10 == 0 or i == len(hashes):
+            progress = (i / len(hashes)) * 100
+            print(f"🔍 Processed {i}/{len(hashes)} ({progress:.1f}%)", file=sys.stderr)
 
     if args.json:
         print(json.dumps({
