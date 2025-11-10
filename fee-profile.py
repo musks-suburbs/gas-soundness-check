@@ -123,6 +123,7 @@ def main():
         sys.exit(1)
 
     w3 = connect(args.rpc)
+    print(f"🔗 RPC endpoint in use: {args.rpc}")
     result = analyze(w3, args.blocks, args.step)
 
     if args.json:
