@@ -118,6 +118,15 @@ def main():
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
+     # ✅ Check if both RPC providers are on the same network
+    net_a = (w3a.eth.chain_id, network_name(w3a.eth.chain_id))
+    net_b = (w3b.eth.chain_id, network_name(w3b.eth.chain_id))
+    if net_a[0] != net_b[0]:
+        print(f"⚠️  Network mismatch detected:")
+        print(f"   RPC1 -> {net_a[1]} (chainId {net_a[0]})")
+        print(f"   RPC2 -> {net_b[1]} (chainId {net_b[0]})")
+        print("❌ Aborting comparison — please use two providers for the same network.")
+        sys.exit(1)
 
     if args.tx:
         if not (args.tx.startswith("0x") and len(args.tx) == 66):
