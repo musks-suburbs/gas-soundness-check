@@ -55,7 +55,15 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     if rcpt is None or rcpt.blockNumber is None:
         print("⏳ Transaction pending or not found.")
         sys.exit(0)
-
+        
+ # ✅ Calculate gas efficiency (used / limit)
+    try:
+        tx = w3.eth.get_transaction(tx_hash)
+        gas_limit = tx.gas
+        gas_efficiency = (rcpt.gasUsed / gas_limit) * 100
+    except Exception:
+        gas_efficiency = None
+        
     # (3) block at tx inclusion
     try:
         block = w3.eth.get_block(rcpt.blockNumber)
@@ -80,6 +88,7 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     total_fee_wei = int(rcpt.gasUsed) * int(gas_price_wei or 0)
 
     return {
+         "gasEfficiency": round(gas_efficiency, 2) if gas_efficiency is not None else None,
         "chainId": int(chain_id),
         "network": network_name(int(chain_id)),
         "txHash": tx_hash,
@@ -129,6 +138,8 @@ def main():
     print(f"📦 Status: {'✅ Success' if summary['status']==1 else '❌ Failed'}")
     print(f"🔢 Block: {summary['blockNumber']}  🕒 {fmt_utc(summary['timestamp'])} UTC  ✅ Confirmations: {summary['confirmations']}")
     print(f"⛽ Gas Used: {summary['gasUsed']}")
+    if summary['gasEfficiency'] is not None:
+    print(f"📈 Gas Efficiency: {summary['gasEfficiency']}% of gas limit used")
     print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary['baseFeeAtTxGwei']:.2f} Gwei)")
     print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
     if summary["totalFeeEth"] > args.warn_fee_eth:
