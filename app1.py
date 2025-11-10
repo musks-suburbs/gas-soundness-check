@@ -20,10 +20,13 @@ def network_name(chain_id: int) -> str:
     return NETWORKS.get(chain_id, f"Unknown (chain ID {chain_id})")
 
 def connect(rpc: str) -> Web3:
+    start = time.time()  # ✅ Start measuring connection time
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 30}))
+    latency = time.time() - start
     if not w3.is_connected():
         print("❌ Failed to connect to RPC endpoint.")
         sys.exit(1)
+    print(f"⚡ Connected to RPC in {latency:.2f}s")
     return w3
 
 def parse_hash(value: str) -> str:
