@@ -13,13 +13,11 @@ It connects to an RPC endpoint, fetches live gas metrics, retrieves a transactio
 - Simple and portable — one file, minimal dependencies
 
 ## Installation
-1. Install Python 3.10 or higher.
-2. Install dependency:
-   ```bash
+1) Create a virtual environment (optional).
+2) Install dependency:
    pip install web3
-3. Set up an RPC endpoint (optional):
-'export RPC_URL="https://mainnet.infura.io/v3/<YOUR_KEY>"'
-
+3) Configure RPC (optional):
+   export RPC_URL="https://mainnet.infura.io/v3/<KEY>"
 ## Usage
 
 Run the script with a transaction hash:
