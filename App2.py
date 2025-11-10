@@ -124,6 +124,8 @@ def main():
     t0 = time.time()
     w3 = connect(args.rpc)
     summary = fetch_tx_summary(w3, args.tx_hash)
+    conn_time = time.time() - t0
+print(f"⚡ RPC connection setup completed in {conn_time:.2f}s")
 
     if args.json:
         import json
