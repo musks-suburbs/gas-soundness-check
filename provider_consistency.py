@@ -143,6 +143,7 @@ def main():
         print("\n— Comparison —")
         for k in ["chainId", "blockNumber", "status", "gasUsed", "commitment"]:
             print(f"{k:12s}: {'✅' if cmp[k] else '❌'}")
+            print(f"🧮 Fields compared: {len(cmp.keys())}")
         if all(cmp.values()):
             print("🔒 Soundness confirmed for tx across providers.")
         else:
