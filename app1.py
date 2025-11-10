@@ -62,6 +62,9 @@ def main():
     parser.add_argument("--rpc", default=RPC_URL, help="RPC endpoint (default from RPC_URL env)")
     args = parser.parse_args()
 
+    if "your_api_key" in args.rpc:
+    print("⚠️  Warning: RPC URL still contains 'your_api_key' — please set your real API key.")
+
     w3 = connect(args.rpc)
     print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
 
