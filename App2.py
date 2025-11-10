@@ -147,5 +147,8 @@ def main():
 
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
 
+import datetime
+print(f"🏁 Finished at {datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
+
 if __name__ == "__main__":
     main()
