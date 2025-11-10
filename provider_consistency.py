@@ -103,6 +103,7 @@ def parse_args():
     mode.add_argument("--tx", help="Transaction hash (0x...) to compare")
     mode.add_argument("--block", help="Block tag/number: latest|finalized|safe|pending or integer")
     ap.add_argument("--json", action="store_true", help="Print JSON result")
+     ap.add_argument("--version", action="store_true", help="Show script version and exit")
     return ap.parse_args()
 
 def as_int_or_tag(s: str):
@@ -115,6 +116,10 @@ def as_int_or_tag(s: str):
 
 def main():
     args = parse_args()
+ # ✅ Handle --version flag
+    if args.version:
+        print("provider_consistency.py version 1.1.0")
+        sys.exit(0)
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
