@@ -170,8 +170,11 @@ def main():
             print(f"{k:15s}: {'✅' if cmp.get(k, False) else '❌'}")
         if all(cmp.get(k, False) for k in ["chainId", "number", "hash", "parentHash", "stateRoot", "receiptsRoot", "transactionsRoot", "timestamp", "commitment"]):
             print("🔒 Soundness confirmed for header across providers.")
-        else:
-            print("⚠️  Inconsistencies detected. Consider using an exact block number or different providers.")
+          else:
+    print("⚠️  Inconsistencies detected. Re-check providers or try again with a specific block tag.")
+if all(cmp.values()): 
+    print("✅ All fields match across providers — full consistency confirmed.")
+
 
     print(f"\n⏱️  Elapsed: {time.time() - t0:.2f}s")
 
