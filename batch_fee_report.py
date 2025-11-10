@@ -7,6 +7,12 @@ import time
 import argparse
 from typing import Dict, Any, Iterable, List, Tuple
 from web3 import Web3
+# ✅ Color codes (can be disabled with --no-color)
+GREEN = "\033[92m"
+RED = "\033[91m"
+YELLOW = "\033[93m"
+RESET = "\033[0m"
+
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 
@@ -162,10 +168,15 @@ def parse_args() -> argparse.Namespace:
     ap.add_argument("--limit", type=int, help="Limit number of hashes read")
     ap.add_argument("--out", help="CSV output path (default: stdout)")
     ap.add_argument("--json", action="store_true", help="Print JSON instead of CSV")
+     ap.add_argument("--no-color", action="store_true", help="Disable colored terminal output")
     return ap.parse_args()
 
 def main():
     args = parse_args()
+    # ✅ Disable colors if user sets --no-color
+    global GREEN, RED, YELLOW, RESET
+    if args.no_color:
+        GREEN = RED = YELLOW = RESET = ""
     hashes = read_hashes(args.file, args.limit)
     if not hashes:
         print("❌ No valid transaction hashes provided.", file=sys.stderr)
