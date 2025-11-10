@@ -62,8 +62,11 @@ def main():
     parser.add_argument("--rpc", default=RPC_URL, help="RPC endpoint (default from RPC_URL env)")
     args = parser.parse_args()
 
-    w3 = connect(args.rpc)
-    print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
+ start_conn = time.time()
+w3 = connect(args.rpc)
+print(f"⚡ RPC latency: {time.time() - start_conn:.2f}s")
+print(f"✔️  Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id}) — proceeding…")
+
 
     tx_hash = parse_hash(args.tx_hash)
     start = time.time()
