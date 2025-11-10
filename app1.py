@@ -60,6 +60,7 @@ def main():
     parser = argparse.ArgumentParser(description="Check Ethereum transaction gas soundness.")
     parser.add_argument("tx_hash", help="Transaction hash (0x...)")
     parser.add_argument("--rpc", default=RPC_URL, help="RPC endpoint (default from RPC_URL env)")
+    parser.add_argument("--json", action="store_true", help="Output result in JSON format")  # ✅ new flag
     args = parser.parse_args()
 
     w3 = connect(args.rpc)
@@ -68,8 +69,27 @@ def main():
     tx_hash = parse_hash(args.tx_hash)
     start = time.time()
 
-    gas_data = fetch_gas_data(w3)
+       gas_data = fetch_gas_data(w3)
     tx_data = fetch_tx_data(w3, tx_hash)
+
+    if args.json:
+        import json
+        output = {
+            "network": network_name(w3.eth.chain_id),
+            "chain_id": w3.eth.chain_id,
+            "transaction": tx_hash,
+            "from": tx_data["from"],
+            "to": tx_data["to"],
+            "status": "success" if tx_data["status"] == 1 else "failed",
+            "block_number": tx_data["block_number"],
+            "gas_used": tx_data["gas_used"],
+            "fee_eth": tx_data["fee_eth"],
+            "base_fee_gwei": float(gas_data["base_fee_gwei"]),
+            "gas_price_gwei": float(gas_data["gas_price_gwei"]),
+        }
+        print(json.dumps(output, indent=2))
+        return
+
 
     print("\n🔗 Transaction:", tx_hash)
     print(f"👤 From: {tx_data['from']}")
