@@ -123,6 +123,11 @@ def main():
 
     t0 = time.time()
     w3 = connect(args.rpc)
+    print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
+
+    
+current_block = w3.eth.block_number
+print(f"🧱 Latest Ethereum block: {current_block}")
     summary = fetch_tx_summary(w3, args.tx_hash)
 
     if args.json:
