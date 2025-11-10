@@ -79,7 +79,19 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
 
     total_fee_wei = int(rcpt.gasUsed) * int(gas_price_wei or 0)
 
+        # ✅ Determine transaction type
+    try:
+        tx = w3.eth.get_transaction(tx_hash)
+        tx_type = {
+            0: "Legacy",
+            1: "Access List",
+            2: "EIP-1559"
+        }.get(tx.get("type", 0), f"Unknown ({tx.get('type')})")
+    except Exception:
+        tx_type = "Unknown"
+        
     return {
+          "txType": tx_type,
         "chainId": int(chain_id),
         "network": network_name(int(chain_id)),
         "txHash": tx_hash,
@@ -124,6 +136,7 @@ def main():
 
     print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
     print(f"🔗 Tx: {summary['txHash']}")
+    print(f"🔖 Type: {summary['txType']}")
     print(f"👤 From: {summary['from']}")
     print(f"🎯 To: {summary['to']}")
     print(f"📦 Status: {'✅ Success' if summary['status']==1 else '❌ Failed'}")
