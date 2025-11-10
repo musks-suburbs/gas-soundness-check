@@ -1,22 +1,4 @@
 # batch_fee_report.py
-"""
-Batch TX Fee Report — companion script for gas-soundness-check
-
-Reads a list of transaction hashes (from a file or stdin) and produces a CSV/JSON
-report with: status, block, confirmations, UTC timestamp, from/to, value (ETH),
-gas used, effective gas price (Gwei), base fee at inclusion (Gwei), priority tip (Gwei),
-total fee (ETH), gas efficiency (% of gas limit), tx type, and age (minutes).
-
-Usage:
-  python batch_fee_report.py --file txhashes.txt
-  cat txhashes.txt | python batch_fee_report.py
-  python batch_fee_report.py --json --limit 50
-  python batch_fee_report.py --rpc https://rpc.ankr.com/eth --out report.csv
-
-Dependencies:
-  pip install web3
-"""
-
 import os
 import sys
 import csv
