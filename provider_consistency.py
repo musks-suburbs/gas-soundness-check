@@ -115,6 +115,7 @@ def as_int_or_tag(s: str):
 
 def main():
     args = parse_args()
+    print(f"🕒 Comparison started at: {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime())}")
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
