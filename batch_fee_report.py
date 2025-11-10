@@ -166,6 +166,9 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
+        # ✅ Show when analysis started
+    print(f"🕒 Analysis started at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC", file=sys.stderr)
+
     hashes = read_hashes(args.file, args.limit)
     if not hashes:
         print("❌ No valid transaction hashes provided.", file=sys.stderr)
