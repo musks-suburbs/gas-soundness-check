@@ -123,6 +123,7 @@ def main():
         sys.exit(1)
 
     w3 = connect(args.rpc)
+    print(f"🕒 Analysis run at: {time.strftime('%Y-%m-%d %H:%M:%S UTC', time.gmtime())}")
     result = analyze(w3, args.blocks, args.step)
 
     if args.json:
