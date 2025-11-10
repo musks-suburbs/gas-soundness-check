@@ -70,6 +70,7 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     except Exception as e:
         print(f"❌ Failed to fetch tx block: {e}")
         sys.exit(2)
+          miner_address = block.get("miner", "N/A")  # ✅ Capture miner/validator
 
     # (4) latest for confirmations
     latest = w3.eth.block_number
@@ -88,6 +89,7 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     total_fee_wei = int(rcpt.gasUsed) * int(gas_price_wei or 0)
 
     return {
+        "miner": miner_address,
          "gasEfficiency": round(gas_efficiency, 2) if gas_efficiency is not None else None,
         "chainId": int(chain_id),
         "network": network_name(int(chain_id)),
@@ -137,6 +139,7 @@ def main():
     print(f"🎯 To: {summary['to']}")
     print(f"📦 Status: {'✅ Success' if summary['status']==1 else '❌ Failed'}")
     print(f"🔢 Block: {summary['blockNumber']}  🕒 {fmt_utc(summary['timestamp'])} UTC  ✅ Confirmations: {summary['confirmations']}")
+    print(f"⛏️  Miner/Validator: {summary['miner']}")
     print(f"⛽ Gas Used: {summary['gasUsed']}")
     if summary['gasEfficiency'] is not None:
     print(f"📈 Gas Efficiency: {summary['gasEfficiency']}% of gas limit used")
