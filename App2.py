@@ -59,8 +59,8 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
  # ✅ Calculate gas efficiency (used / limit)
     try:
         tx = w3.eth.get_transaction(tx_hash)
-        gas_limit = tx.gas
-        gas_efficiency = (rcpt.gasUsed / gas_limit) * 100
+       gas_limit = tx.gas
+gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
     except Exception:
         gas_efficiency = None
         
