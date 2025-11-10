@@ -174,6 +174,7 @@ def main():
             print("⚠️  Inconsistencies detected. Consider using an exact block number or different providers.")
 
     print(f"\n⏱️  Elapsed: {time.time() - t0:.2f}s")
+print(f"⏱️ Total comparison time: {round(time.time() - t0, 2)}s")
 
 if __name__ == "__main__":
     main()
