@@ -126,7 +126,9 @@ def main():
     print(f"🔗 Tx: {summary['txHash']}")
     print(f"👤 From: {summary['from']}")
     print(f"🎯 To: {summary['to']}")
-    print(f"📦 Status: {'✅ Success' if summary['status']==1 else '❌ Failed'}")
+   status_text = "✅ Success" if summary["status"] == 1 else "❌ Failed"
+   color = "green" if summary["status"] == 1 else "red"
+    print(f"📦 Status: {colorize(status_text, color)}")
     print(f"🔢 Block: {summary['blockNumber']}  🕒 {fmt_utc(summary['timestamp'])} UTC  ✅ Confirmations: {summary['confirmations']}")
     print(f"⛽ Gas Used: {summary['gasUsed']}")
     print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary['baseFeeAtTxGwei']:.2f} Gwei)")
