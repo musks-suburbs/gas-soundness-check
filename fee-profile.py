@@ -123,6 +123,7 @@ def main():
         sys.exit(1)
 
     w3 = connect(args.rpc)
+    print(f"📊 Analyzing last {args.blocks} blocks (every {args.step}th block)...")
     result = analyze(w3, args.blocks, args.step)
 
     if args.json:
