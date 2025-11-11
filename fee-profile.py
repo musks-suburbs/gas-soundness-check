@@ -83,9 +83,20 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
 
 
     elapsed = time.time() - t0
+
+    # ✅ Estimate average block time
+    if len(basefees) >= 2:
+        first_block = w3.eth.get_block(head)
+        last_block = w3.eth.get_block(start)
+        time_diff = first_block.timestamp - last_block.timestamp
+        block_time_avg = time_diff / (head - start) if head > start else 0
+    else:
+        block_time_avg = 0
+
     return {
         "chainId": int(w3.eth.chain_id),
         "network": network_name(int(w3.eth.chain_id)),
+        "avgBlockTimeSec": round(block_time_avg, 2),
         "head": head,
         "sampledBlocks": len(range(head, start - 1, -step)),
         "blockSpan": blocks,
@@ -138,10 +149,11 @@ def main():
         return
 
     print(f"🌐 {result['network']} (chainId {result['chainId']})  head={result['head']}")
-    print(f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} (step={result['step']}) in {result['timingSec']}s")
+    print(f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} (step={result['step']}) in {result['timingSec']}s") 
     bf = result["baseFeeGwei"]
     ep = result["effectivePriceGwei"]
     tp = result["tipGweiApprox"]
+    print(f"🕒 Average Block Time: {result['avgBlockTimeSec']} seconds")
     print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
     print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
     print(f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  (n={tp['count']})")
