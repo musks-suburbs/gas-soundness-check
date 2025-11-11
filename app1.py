@@ -85,6 +85,7 @@ def main():
     parser.add_argument("tx_hash", help="Transaction hash (0x...)")
     parser.add_argument("--rpc", default=RPC_URL, help="RPC endpoint (default from RPC_URL env)")
     args = parser.parse_args()
+print(f"⏰ Script started at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}")
 
     w3 = connect(args.rpc)
     print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
