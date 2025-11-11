@@ -41,3 +41,11 @@ Optionally specify an RPC:
 - ⛽ Base Fee: 25.40 Gwei
 - ⚙️  Suggested Gas Price: 27.12 Gwei
 - ⏱️  Elapsed: 2.35s
+
+## Output (human-readable)
+- Network & chain ID
+- Tx hash, sender, recipient
+- Status, block number, UTC timestamp, confirmations
+- Gas used, gas price (effective if EIP-1559), base fee at tx block
+- Total ETH fee, with optional high-fee warning
+- Elapsed time
