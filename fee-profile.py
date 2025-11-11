@@ -123,6 +123,7 @@ def main():
         sys.exit(1)
 
     w3 = connect(args.rpc)
+    print(f"📊 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
     result = analyze(w3, args.blocks, args.step)
 
     if args.json:
