@@ -118,6 +118,8 @@ def main():
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
+    print(f"⚙️ Active network chain IDs → RPC1: {w3a.eth.chain_id}, RPC2: {w3b.eth.chain_id}")
+
 
     if args.tx:
         if not (args.tx.startswith("0x") and len(args.tx) == 66):
