@@ -153,9 +153,12 @@ def main():
     print(f"🔢 Block: {summary['blockNumber']}  🕒 {fmt_utc(summary['timestamp'])} UTC  ✅ Confirmations: {summary['confirmations']}")
     print(f"⛏️  Miner/Validator: {summary['miner']}")
     print(f"⛽ Gas Used: {summary['gasUsed']}")
-    if summary['gasEfficiency'] is not None:
+if summary['gasEfficiency'] is not None:
     print(f"📈 Gas Efficiency: {summary['gasEfficiency']}% of gas limit used")
-    print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary['baseFeeAtTxGwei']:.2f} Gwei)")
+else:
+    print("📈 Gas Efficiency: N/A (gas limit unavailable)")
+print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary['baseFeeAtTxGwei']:.2f} Gwei)")
+These two tiny changes prevent a crash on odd txs with missing gas limit and fix the current indentation
     print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
     if summary["totalFeeEth"] > args.warn_fee_eth:
         print(f"⚠️  High Fee Warning: {summary['totalFeeEth']:.4f} ETH exceeds threshold {args.warn_fee_eth:.4f} ETH.")
