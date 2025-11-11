@@ -118,6 +118,8 @@ print(f"🔁 Confirmations: {confirmations}")
     print(f"⚙️  Suggested Gas Price: {gas_data['gas_price_gwei']:.2f} Gwei")
 
     print(f"\n⏱️  Elapsed: {time.time() - start:.2f}s")
-
+    
+# ✅ Show timestamp of when the analysis was done
+    print(f"🕒 Check completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
 if __name__ == "__main__":
     main()
