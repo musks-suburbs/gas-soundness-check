@@ -78,6 +78,10 @@ def main():
     print(f"🔢 Block: {tx_data['block_number']}")
     print(f"⛽ Gas Used: {tx_data['gas_used']}")
     print(f"💰 Fee: {tx_data['fee_eth']:.6f} ETH")
+    # ✅ New code: show confirmations
+    latest_block = w3.eth.block_number
+confirmations = latest_block - tx_data["block_number"]
+print(f"🔁 Confirmations: {confirmations}")
 
     if tx_data["fee_eth"] > 0.05:
         print(f"⚠️  High Fee Warning: This transaction cost {tx_data['fee_eth']:.4f} ETH.")
