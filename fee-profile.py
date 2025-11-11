@@ -123,6 +123,7 @@ def main():
         sys.exit(1)
 
     w3 = connect(args.rpc)
+    print(f"🔍 Sampling every {step}th block across last {blocks} blocks")
     result = analyze(w3, args.blocks, args.step)
 
     if args.json:
