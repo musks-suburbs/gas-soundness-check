@@ -94,10 +94,14 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
             gas_price_wei = 0
 
     total_fee_wei = int(rcpt.gasUsed) * int(gas_price_wei or 0)
-
+    
+   # ✅ Get miner/validator address
+    miner_address = block.get("miner", "N/A")
+    
     return {
          "gasEfficiency": round(gas_efficiency, 2) if gas_efficiency is not None else None,
         "chainId": int(chain_id),
+        "miner": miner_address,
         "network": network_name(int(chain_id)),
         "txHash": tx_hash,
         "from": rcpt["from"],
@@ -147,6 +151,7 @@ def main():
    color = "green" if summary["status"] == 1 else "red"
     print(f"📦 Status: {colorize(status_text, color)}")
     print(f"🔢 Block: {summary['blockNumber']}  🕒 {fmt_utc(summary['timestamp'])} UTC  ✅ Confirmations: {summary['confirmations']}")
+    print(f"⛏️  Miner/Validator: {summary['miner']}")
     print(f"⛽ Gas Used: {summary['gasUsed']}")
     if summary['gasEfficiency'] is not None:
     print(f"📈 Gas Efficiency: {summary['gasEfficiency']}% of gas limit used")
