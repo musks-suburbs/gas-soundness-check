@@ -118,6 +118,9 @@ def main():
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
+    
+    print(f"🔍 Checking consistency at {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
+
 
     if args.tx:
         if not (args.tx.startswith("0x") and len(args.tx) == 66):
