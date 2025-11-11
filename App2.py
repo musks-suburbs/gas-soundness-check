@@ -129,6 +129,8 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
+print(f"🔍 Mode selected: {'TX check' if args.tx else 'Block check'}")
+
     if not is_tx_hash(args.tx_hash):
         print("❌ Invalid transaction hash format.")
         sys.exit(1)
