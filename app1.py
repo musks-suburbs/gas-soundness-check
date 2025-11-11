@@ -92,7 +92,8 @@ def main():
     tx_hash = parse_hash(args.tx_hash)
     start = time.time()
 
-    gas_data = fetch_gas_data(w3)
+      gas_data = fetch_gas_data(w3)
+    print("🔍 Fetching transaction data, please wait...")
     tx_data = fetch_tx_data(w3, tx_hash)
 
     print("\n🔗 Transaction:", tx_hash)
