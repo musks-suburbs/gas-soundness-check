@@ -36,6 +36,7 @@ def fmt_utc(ts: int) -> str:
 
 # ---------- Core (optimized: minimal RPC calls) ----------
 def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
+    
     """
     Optimized plan (minimize RPC round-trips):
       1) eth_chainId                                  -> chain id
@@ -52,8 +53,15 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     except Exception as e:
         print(f"❌ Failed to fetch receipt: {e}")
         sys.exit(2)
+        
+        # ✅ New code: check if tx is pending
+    tx = w3.eth.get_transaction(tx_hash)
+    if tx and tx.blockNumber is None:
+        print("⏳ Transaction is still pending — not yet mined.")
+        sys.exit(0)
+
     if rcpt is None or rcpt.blockNumber is None:
-        print("⏳ Transaction pending or not found.")
+        print("❌ Transaction not found or incomplete data.")
         sys.exit(0)
         
  # ✅ Calculate gas efficiency (used / limit)
