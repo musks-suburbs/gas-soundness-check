@@ -166,6 +166,9 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
+    import platform
+print(f"🐍 Environment: Python {platform.python_version()} on {platform.system()} {platform.release()}")
+
       print(f"🔗 Using RPC endpoint: {args.rpc}")
     hashes = read_hashes(args.file, args.limit)
     print(f"🧮 Processing {len(hashes)} transaction hashes…")
@@ -194,7 +197,7 @@ def main():
             "chainId": int(w3.eth.chain_id),
             "count": len(rows),
             "generatedAtUtc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
-            "rows": rows
+            "": rows
         }, indent=2, sort_keys=True))
     else:
         to_csv(rows, args.out)
