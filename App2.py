@@ -135,6 +135,9 @@ def main():
 
     t0 = time.time()
     w3 = connect(args.rpc)
+print(f"📡 RPC Endpoint: {args.rpc}")
+print(f"🌐 Connected to network ID: {w3.eth.chain_id}")
+
     summary = fetch_tx_summary(w3, args.tx_hash)
 
     if args.json:
