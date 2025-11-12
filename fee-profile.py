@@ -81,6 +81,9 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
         eff_gwei, tip_gwei = sample_block_fees(blk, bf)
         eff_prices.extend(eff_gwei)
         tips.extend(tip_gwei)
+        # ✅ Show progress every 20 sampled blocks
+        if len(basefees) % 20 == 0:
+            print(f"🔍 Processed {len(basefees)} blocks so far... (latest={n})")
 
         if n % (step * 10) == 0:
             print(f"   ⏳ At block {n}...")
