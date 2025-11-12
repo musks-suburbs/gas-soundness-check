@@ -135,6 +135,9 @@ def main():
 
     t0 = time.time()
     w3 = connect(args.rpc)
+if not w3.is_connected():
+    print("⚠️  Warning: Connection seems unstable, results may be incomplete.")
+
     summary = fetch_tx_summary(w3, args.tx_hash)
 
     if args.json:
