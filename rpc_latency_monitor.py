@@ -8,6 +8,7 @@ def check_endpoint(rpc_url, threshold_ms=200):
     t0 = time.time()
     block = w3.eth.block_number
     latency_ms = (time.time() - t0) * 1000
+    print(f"✅ RPC {rpc_url} latency: {latency_ms:.0f} ms (timeout: {w3.provider._provider_request_kwargs.get('timeout', 'n/a')} s)")
     status = "OK" if latency_ms <= threshold_ms else "SLOW"
     return rpc_url, block, round(latency_ms), status
 
