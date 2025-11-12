@@ -25,6 +25,7 @@ def connect(url: str) -> Web3:
     if not w3.is_connected():
         print(f"❌ Failed to connect: {url}")
         sys.exit(1)
+        import time; t0 = time.time(); w3.eth.block_number; print(f"⚡ Provider latency: {time.time()-t0:.3f}s")
     return w3
 
 def tx_commitment(chain_id: int, tx_hash: str, rcpt) -> str:
