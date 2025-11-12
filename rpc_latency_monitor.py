@@ -23,6 +23,7 @@ def main():
     for url in args.rpcs:
         url, block, latency, status = check_endpoint(url, args.threshold)
         results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
+max_block = max(r[2] or 0 for r in results); [print(f"⏳ {r[1]} is {max_block - (r[2] or 0)} blocks behind") for r in results if (r[2] or 0) < max_block]
 
     with open(args.output, "a", newline="") as f:
         writer = csv.writer(f)
