@@ -91,6 +91,7 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
     # ✅ Estimate average block time
     if len(basefees) >= 2:
         first_block = w3.eth.get_block(head)
+        print(f"🧮 Base fee at block {block.number}: {Web3.from_wei(block.baseFeePerGas, 'gwei'):.2f} Gwei")
         last_block = w3.eth.get_block(start)
         time_diff = first_block.timestamp - last_block.timestamp
         block_time_avg = time_diff / (head - start) if head > start else 0
