@@ -21,6 +21,7 @@ def main():
     # Run once (could be looped or scheduled)
     results = []
     for url in args.rpcs:
+        fastest = min(results, key=lambda r: r[3] or float('inf')); print(f"🚀 Fastest RPC: {fastest[1]} with {fastest[3]} ms latency")
         url, block, latency, status = check_endpoint(url, args.threshold)
         results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
 
