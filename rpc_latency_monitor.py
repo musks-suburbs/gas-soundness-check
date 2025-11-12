@@ -8,6 +8,8 @@ def check_endpoint(rpc_url, threshold_ms=200):
     t0 = time.time()
     block = w3.eth.block_number
     latency_ms = (time.time() - t0) * 1000
+    print(f"📡 Endpoint {rpc_url} responded with block {block_number} in {latency_ms:.0f} ms")
+    results.append((rpc_url, block_number, latency_ms))
     status = "OK" if latency_ms <= threshold_ms else "SLOW"
     return rpc_url, block, round(latency_ms), status
 
