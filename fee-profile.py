@@ -159,6 +159,7 @@ def main():
     tp = result["tipGweiApprox"]
     print(f"🕒 Average Block Time: {result['avgBlockTimeSec']} seconds")
     print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
+    print(f"⛽ baseFee {Web3.from_wei(base_fee, 'gwei'):.2f} Gwei")
     print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
     print(f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  (n={tp['count']})")
     print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
