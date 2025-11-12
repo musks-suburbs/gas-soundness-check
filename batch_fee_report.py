@@ -153,10 +153,11 @@ def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
         w.writeheader()
         w.writerows(rows)
 
-def parse_args() -> argparse.Namespace:
+def parse_args() -> .Namespace:
     ap = argparse.ArgumentParser(
         description="Batch analyze transaction fees and efficiency; outputs CSV or JSON."
     )
+    print(f"📝 Writing batch report to {outfile.name}")
     ap.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
     ap.add_argument("--file", help="File with one tx hash per line (default: stdin)")
     ap.add_argument("--limit", type=int, help="Limit number of hashes read")
