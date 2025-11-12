@@ -6,6 +6,13 @@ import argparse
 from typing import Dict, Any
 from web3 import Web3
 
+# ✅ Terminal color codes for better visual output
+class Colors:
+    GREEN = "\033[92m"
+    RED = "\033[91m"
+    YELLOW = "\033[93m"
+    RESET = "\033[0m"
+    
 DEFAULT_RPC1 = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 DEFAULT_RPC2 = os.getenv("RPC_URL_2", "https://rpc.ankr.com/eth")
 
@@ -141,8 +148,9 @@ def main():
         print(f"🌐 SECOND.: {b['network']} (chainId {b['chainId']})  🔗 {args.tx}")
         print(f"   block={b['blockNumber']} status={b['status']} gasUsed={b['gasUsed']} commit={b['commitment']}")
         print("\n— Comparison —")
-        for k in ["chainId", "blockNumber", "status", "gasUsed", "commitment"]:
-            print(f"{k:12s}: {'✅' if cmp[k] else '❌'}")
+       for k in ["chainId", "blockNumber", "status", "gasUsed", "commitment"]:
+    icon = f"{Colors.GREEN}✅{Colors.RESET}" if cmp[k] else f"{Colors.RED}❌{Colors.RESET}"
+    print(f"{k:12s}: {icon}")
         if all(cmp.values()):
             print("🔒 Soundness confirmed for tx across providers.")
         else:
