@@ -162,7 +162,8 @@ These two tiny changes prevent a crash on odd txs with missing gas limit and fix
     print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
     if summary["totalFeeEth"] > args.warn_fee_eth:
         print(f"⚠️  High Fee Warning: {summary['totalFeeEth']:.4f} ETH exceeds threshold {args.warn_fee_eth:.4f} ETH.")
-
+  print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
+    if summary["status"] == 0: print("🧩 Note: Transaction failed — gas was consumed but state not updated.")
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
 
 if __name__ == "__main__":
