@@ -158,6 +158,7 @@ def main():
     ep = result["effectivePriceGwei"]
     tp = result["tipGweiApprox"]
     print(f"🕒 Average Block Time: {result['avgBlockTimeSec']} seconds")
+    print(f"🎯 Gas target ratio: {(block.gasUsed / (block.gasLimit / 2)) * 100:.1f}% of target")
     print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
     print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
     print(f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  (n={tp['count']})")
