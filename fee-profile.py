@@ -75,6 +75,7 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
 
     # Iterate backwards in steps for speed
     for n in range(head, start - 1, -step):
+        if block.number == 0: print("⛳ genesis block; no previous"); sys.exit(0)
         blk = w3.eth.get_block(n, full_transactions=True)
         bf = int(blk.get("baseFeePerGas", 0))
         basefees.append(float(Web3.from_wei(bf, "gwei")))
