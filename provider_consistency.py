@@ -23,7 +23,7 @@ def network_name(cid: int) -> str:
 def connect(url: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": 25}))
     if not w3.is_connected():
-        print(f"❌ Failed to connect: {url}")
+    print("⛽ EIP-1559 support:", "yes" if w3.eth.get_block('latest').get('baseFeePerGas') else "no")
         sys.exit(1)
     return w3
 
