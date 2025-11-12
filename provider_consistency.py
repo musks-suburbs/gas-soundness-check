@@ -22,9 +22,7 @@ def network_name(cid: int) -> str:
 
 def connect(url: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": 25}))
-    if not w3.is_connected():
-        print(f"❌ Failed to connect: {url}")
-        sys.exit(1)
+   if not w3.is_connected(): print("❌ RPC provider unreachable — check URL or network.") or sys.exit(1)
     return w3
 
 def tx_commitment(chain_id: int, tx_hash: str, rcpt) -> str:
