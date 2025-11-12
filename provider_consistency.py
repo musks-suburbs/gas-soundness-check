@@ -67,6 +67,7 @@ def fetch_tx_bundle(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     if rcpt is None or rcpt.blockNumber is None:
         return {"statusText": "pending_or_not_found"}
     chain_id = w3.eth.chain_id
+    if chain_id not in (1, 11155111): print(f"⚠️  Warning: unexpected chain ID {chain_id}, check your provider.")
     return {
         "chainId": int(chain_id),
         "network": network_name(int(chain_id)),
