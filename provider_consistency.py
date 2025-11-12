@@ -22,6 +22,7 @@ def network_name(cid: int) -> str:
 
 def connect(url: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": 25}))
+    print(f"🧠 Client: {w3.client_version}")
     if not w3.is_connected():
         print(f"❌ Failed to connect: {url}")
         sys.exit(1)
