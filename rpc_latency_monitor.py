@@ -7,6 +7,7 @@ def check_endpoint(rpc_url, threshold_ms=200):
         return rpc_url, None, None, "DISCONNECTED"
     t0 = time.time()
     block = w3.eth.block_number
+    if block < reference_block - 5: print(f"⚠️  {rpc_url} lagging behind by {reference_block - block} blocks")
     latency_ms = (time.time() - t0) * 1000
     status = "OK" if latency_ms <= threshold_ms else "SLOW"
     return rpc_url, block, round(latency_ms), status
