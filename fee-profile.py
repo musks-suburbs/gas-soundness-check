@@ -92,6 +92,7 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
     if len(basefees) >= 2:
         first_block = w3.eth.get_block(head)
         last_block = w3.eth.get_block(start)
+        gas_limit = int(block.get("gasLimit") or 0) or 1  # avoid div/zero
         time_diff = first_block.timestamp - last_block.timestamp
         block_time_avg = time_diff / (head - start) if head > start else 0
     else:
