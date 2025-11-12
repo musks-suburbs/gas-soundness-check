@@ -5,7 +5,7 @@ def check_endpoint(rpc_url, threshold_ms=200):
     w3 = Web3(Web3.HTTPProvider(rpc_url, request_kwargs={"timeout":10}))
     if not w3.is_connected():
         return rpc_url, None, None, "DISCONNECTED"
-    t0 = time.time()
+    t0 = time.monotonic(); _ = w3.eth.block_number; latency_ms = (time.monotonic() - t0) * 1000
     block = w3.eth.block_number
     latency_ms = (time.time() - t0) * 1000
     status = "OK" if latency_ms <= threshold_ms else "SLOW"
