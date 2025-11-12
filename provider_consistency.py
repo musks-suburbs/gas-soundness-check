@@ -19,9 +19,11 @@ NETWORKS = {
 
 def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
-
+print(f"⚡ Check completed in {time.time() - start_time:.3f} seconds")
 def connect(url: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": 25}))
+    import time; start_time = time.time()
+
     if not w3.is_connected():
         print(f"❌ Failed to connect: {url}")
         sys.exit(1)
