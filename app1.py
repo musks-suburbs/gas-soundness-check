@@ -12,7 +12,7 @@ NETWORKS = {
     1: "Ethereum Mainnet",
     11155111: "Sepolia Testnet",
     10: "Optimism",
-    137: "Polygon",
+    137: "Polygon", в
     42161: "Arbitrum One",
 }
 
