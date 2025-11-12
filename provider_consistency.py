@@ -79,6 +79,7 @@ def fetch_tx_bundle(w3: Web3, tx_hash: str) -> Dict[str, Any]:
 
 def fetch_block_bundle(w3: Web3, block_id) -> Dict[str, Any]:
     header = w3.eth.get_block(block_id)
+    import time; print(f"🕒 Block time delta: {int(time.time()) - latest_block.timestamp}s from local clock")
     chain_id = w3.eth.chain_id
     return {
         "chainId": int(chain_id),
