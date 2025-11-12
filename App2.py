@@ -129,6 +129,8 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
+from datetime import datetime
+print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
     if not is_tx_hash(args.tx_hash):
         print("❌ Invalid transaction hash format.")
         sys.exit(1)
