@@ -142,6 +142,8 @@ def main():
         # Compact JSON but stable keys
         print(json.dumps(summary, separators=(",", ":"), sort_keys=True))
         return
+start_time = time.time()
+print(f"⏱️  Elapsed: {time.time() - start_time:.2f}s")
 
     print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
     print(f"🔗 Tx: {summary['txHash']}")
