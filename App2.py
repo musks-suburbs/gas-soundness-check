@@ -144,6 +144,9 @@ def main():
         return
 
     print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
+    print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
+    if "Testnet" in network_name(w3.eth.chain_id):  
+    print("⚠️  You are connected to a testnet network. Results may differ from mainnet.")  
     print(f"🔗 Tx: {summary['txHash']}")
     print(f"👤 From: {summary['from']}")
     print(f"🎯 To: {summary['to']}")
