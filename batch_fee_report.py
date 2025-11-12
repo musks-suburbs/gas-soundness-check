@@ -166,6 +166,7 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
+    print(f"⏰ Started processing at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}")
       print(f"🔗 Using RPC endpoint: {args.rpc}")
     hashes = read_hashes(args.file, args.limit)
     print(f"🧮 Processing {len(hashes)} transaction hashes…")
