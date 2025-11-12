@@ -135,6 +135,7 @@ def main():
 
     t0 = time.time()
     w3 = connect(args.rpc)
+print(f"✅ Successfully connected to RPC endpoint: {args.rpc}")
     summary = fetch_tx_summary(w3, args.tx_hash)
 
     if args.json:
