@@ -26,7 +26,19 @@ def connect(url: str) -> Web3:
         print(f"❌ Failed to connect: {url}")
         sys.exit(1)
     return w3
-
+    
+# ✅ Simple retry wrapper for RPC calls
+def safe_call(fn, *args, retries=3, delay=2, **kwargs):
+    for attempt in range(1, retries + 1):
+        try:
+            return fn(*args, **kwargs)
+        except Exception as e:
+            if attempt == retries:
+                print(f"❌ RPC call failed after {retries} attempts: {e}")
+                sys.exit(2)
+            print(f"⚠️  RPC call failed (attempt {attempt}/{retries}): {e}")
+            time.sleep(delay)
+            
 def tx_commitment(chain_id: int, tx_hash: str, rcpt) -> str:
     """
     keccak(chainId[8] || txHash[32] || blockNumber[8] || status[1] || gasUsed[8])
@@ -63,7 +75,7 @@ def compare_dicts(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, bool]:
     return {k: (a.get(k) == b.get(k)) for k in sorted(set(a.keys()) | set(b.keys()))}
 
 def fetch_tx_bundle(w3: Web3, tx_hash: str) -> Dict[str, Any]:
-    rcpt = w3.eth.get_transaction_receipt(tx_hash)
+   rcpt = safe_call(w3.eth.get_transaction_receipt, tx_hash)
     if rcpt is None or rcpt.blockNumber is None:
         return {"statusText": "pending_or_not_found"}
     chain_id = w3.eth.chain_id
@@ -78,7 +90,7 @@ def fetch_tx_bundle(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     }
 
 def fetch_block_bundle(w3: Web3, block_id) -> Dict[str, Any]:
-    header = w3.eth.get_block(block_id)
+   header = safe_call(w3.eth.get_block, block_id)
     chain_id = w3.eth.chain_id
     return {
         "chainId": int(chain_id),
