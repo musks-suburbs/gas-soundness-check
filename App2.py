@@ -60,9 +60,10 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
         print("⏳ Transaction is still pending — not yet mined.")
         sys.exit(0)
 
-    if rcpt is None or rcpt.blockNumber is None:
-        print("❌ Transaction not found or incomplete data.")
+      if rcpt is None or rcpt.blockNumber is None:
+        print("❌ Транзакция не найдена или ещё не включена в блок.")
         sys.exit(0)
+
         
  # ✅ Calculate gas efficiency (used / limit)
     try:
