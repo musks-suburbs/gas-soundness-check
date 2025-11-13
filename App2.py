@@ -50,6 +50,12 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     # (2) receipt
     try:
         rcpt = w3.eth.get_transaction_receipt(tx_hash)
+        # Проверяем, не находится ли транзакция в ожидании
+tx = w3.eth.get_transaction(tx_hash)
+if tx and tx.blockNumber is None:
+    print("⏳ Транзакция находится в мемпуле — блок ещё не присвоен.")
+    sys.exit(0)
+
     except Exception as e:
         print(f"❌ Failed to fetch receipt: {e}")
         sys.exit(2)
