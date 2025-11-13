@@ -144,7 +144,9 @@ def main():
         return
 
     print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
-    print(f"🔗 Tx: {summary['txHash']}")
+      if summary["chainId"] == 1:
+        print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
+
     print(f"👤 From: {summary['from']}")
     print(f"🎯 To: {summary['to']}")
    status_text = "✅ Success" if summary["status"] == 1 else "❌ Failed"
