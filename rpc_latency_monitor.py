@@ -1,4 +1,5 @@
 import time, csv, argparse, sys
+import os
 from web3 import Web3
 
 def check_endpoint(rpc_url, threshold_ms=200):
@@ -29,12 +30,20 @@ def main():
         url, block, latency, status = check_endpoint(url, args.threshold)
         results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
 
+    file_exists = os.path.exists(args.output)
+    write_header = not file_exists or os.path.getsize(args.output) == 0
+
     with open(args.output, "a", newline="") as f:
         writer = csv.writer(f)
+        if write_header:
+            writer.writerow(["timestamp", "rpc_url", "block", "latency_ms", "status"])
         for row in results:
+            timestamp, url, block, latency, status = row
             writer.writerow(row)
-            if latency > args.threshold * 2: print(f"⚠️  {url} extremely slow: {latency:.0f} ms")
+            if latency is not None and latency > args.threshold * 2:
+                print(f"⚠️  {url} extremely slow: {latency:.0f} ms", file=sys.stderr)
             print(row)
+
 
 if __name__ == "__main__":
     main()
