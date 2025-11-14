@@ -51,15 +51,20 @@ def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float
     bf = base_fee_wei or 0
     for tx in block.transactions:
         # EIP-1559 type can be 2, AccessList 1, Legacy 0/None
-        ttype = tx.get("type", 0) if isinstance(tx, dict) else getattr(tx, "type", 0)
+        ttype = getattr(tx, "type", None)
+        if ttype is None and isinstance(tx, dict):
+            ttype = tx.get("type", 0)
         if ttype == 2:  # EIP-1559
-            mpp = int(tx.get("maxPriorityFeePerGas", 0))
-            mfp = int(tx.get("maxFeePerGas", 0))
+            mpp = int(getattr(tx, "maxPriorityFeePerGas", tx.get("maxPriorityFeePerGas", 0)) if isinstance(tx, dict) else getattr(tx, "maxPriorityFeePerGas", 0))
+            mfp = int(getattr(tx, "maxFeePerGas", tx.get("maxFeePerGas", 0)) if isinstance(tx, dict) else getattr(tx, "maxFeePerGas", 0))
             effective = min(mfp, bf + mpp)
             eff.append(float(Web3.from_wei(effective, "gwei")))
             tip.append(float(Web3.from_wei(mpp, "gwei")))
         else:
-            gp = int(tx.get("gasPrice", 0))
+            gp = int(getattr(tx, "gasPrice", tx.get("gasPrice", 0)) if isinstance(tx, dict) else getattr(tx, "gasPrice", 0))
+            eff.append(float(Web3.from_wei(gp, "gwei")))
+            tip.append(float(Web3.from_wei(max(0, gp - bf), "gwei")))
+
             eff.append(float(Web3.from_wei(gp, "gwei")))
             tip.append(float(Web3.from_wei(max(0, gp - bf), "gwei")))
     return eff, tip
