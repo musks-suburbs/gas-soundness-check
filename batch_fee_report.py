@@ -9,7 +9,11 @@ from typing import Dict, Any, Iterable, List, Tuple
 from web3 import Web3
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
-
+if "your_api_key" in DEFAULT_RPC:
+    print(
+        "⚠️  RPC_URL environment variable is not set and DEFAULT_RPC uses a placeholder key.",
+        file=sys.stderr,
+    )
 NETWORKS = {
     1: "Ethereum Mainnet",
     11155111: "Sepolia Testnet",
