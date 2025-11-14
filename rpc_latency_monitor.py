@@ -1,5 +1,6 @@
 import time, csv, argparse, sys
 from web3 import Web3
+import json
 
 def check_endpoint(rpc_url, threshold_ms=200):
     w3 = Web3(Web3.HTTPProvider(rpc_url, request_kwargs={"timeout":10}))
@@ -17,6 +18,7 @@ def check_endpoint(rpc_url, threshold_ms=200):
     return rpc_url, block, round(latency_ms), status
 
 def main():
+        parser.add_argument("--json-summary", action="store_true", help="Print JSON summary to stdout")
     parser = argparse.ArgumentParser(description="RPC latency monitor")
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
@@ -35,6 +37,18 @@ def main():
             writer.writerow(row)
             if latency > args.threshold * 2: print(f"⚠️  {url} extremely slow: {latency:.0f} ms")
             print(row)
+    ok = sum(1 for _, _, _, latency, status in results if status == "OK")
+    slow = sum(1 for _, _, _, latency, status in results if status in ("SLOW", "VERY_SLOW"))
+    disconnected = sum(1 for _, _, _, latency, status in results if status == "DISCONNECTED")
+    print(f"\nSummary: OK={ok}, slow={slow}, disconnected={disconnected}", file=sys.stderr)
+    if args.json_summary:
+        summary = {
+            "ok": ok,
+            "slow": slow,
+            "disconnected": disconnected,
+            "total": len(results),
+        }
+        print(json.dumps(summary, indent=2))
 
 if __name__ == "__main__":
     main()
