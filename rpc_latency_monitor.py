@@ -35,6 +35,10 @@ def main():
             writer.writerow(row)
             if latency > args.threshold * 2: print(f"⚠️  {url} extremely slow: {latency:.0f} ms")
             print(row)
+    ok = sum(1 for _, _, _, latency, status in results if status == "OK")
+    slow = sum(1 for _, _, _, latency, status in results if status in ("SLOW", "VERY_SLOW"))
+    disconnected = sum(1 for _, _, _, latency, status in results if status == "DISCONNECTED")
+    print(f"\nSummary: OK={ok}, slow={slow}, disconnected={disconnected}", file=sys.stderr)
 
 if __name__ == "__main__":
     main()
