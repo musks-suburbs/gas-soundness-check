@@ -130,11 +130,24 @@ def main():
             print("⏳ Pending or not found on at least one provider.")
             sys.exit(0)
 
-        cmp = compare_dicts(a, b)
+               cmp = compare_dicts(a, b)
         if args.json:
-            import json
-            print(json.dumps({"primary": a, "secondary": b, "match": cmp}, indent=2, sort_keys=True))
+            elapsed = time.time() - t0
+            print(
+                json.dumps(
+                    {
+                        "mode": "tx",
+                        "primary": a,
+                        "secondary": b,
+                        "match": cmp,
+                        "elapsedSeconds": elapsed,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
             return
+
 
         print(f"🌐 PRIMARY: {a['network']} (chainId {a['chainId']})  🔗 {args.tx}")
         print(f"   block={a['blockNumber']} status={a['status']} gasUsed={a['gasUsed']} commit={a['commitment']}")
