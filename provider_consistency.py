@@ -29,7 +29,11 @@ def connect(url: str) -> Web3:
 
 def tx_commitment(chain_id: int, tx_hash: str, rcpt) -> str:
     """
-    keccak(chainId[8] || txHash[32] || blockNumber[8] || status[1] || gasUsed[8])
+    Compute a compact commitment for a transaction:
+
+        keccak(chainId[8] || txHash[32] || blockNumber[8] || status[1] || gasUsed[8])
+
+    This is useful for cross-provider equality checks without pulling full receipts.
     """
     payload = (
         int(chain_id).to_bytes(8, "big")
