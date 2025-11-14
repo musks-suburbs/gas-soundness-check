@@ -8,6 +8,7 @@ from web3 import Web3
 
 DEFAULT_RPC1 = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 DEFAULT_RPC2 = os.getenv("RPC_URL_2", "https://rpc.ankr.com/eth")
+DEFAULT_TIMEOUT = float(os.getenv("RPC_TIMEOUT", "25"))
 
 NETWORKS = {
     1: "Ethereum Mainnet",
@@ -103,6 +104,13 @@ def parse_args():
     mode.add_argument("--tx", help="Transaction hash (0x...) to compare")
     mode.add_argument("--block", help="Block tag/number: latest|finalized|safe|pending or integer")
     ap.add_argument("--json", action="store_true", help="Print JSON result")
+        ap.add_argument(
+        "--timeout",
+        type=float,
+        default=DEFAULT_TIMEOUT,
+        help="RPC timeout in seconds (default from RPC_TIMEOUT env or 25)",
+    )
+
     return ap.parse_args()
 
 def as_int_or_tag(s: str):
