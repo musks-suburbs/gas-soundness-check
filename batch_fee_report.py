@@ -67,7 +67,13 @@ def safe_call(fn, *args, retries=2, delay=0.8, **kwargs):
             time.sleep(delay)
 
 def tx_type_label(tt) -> str:
-    return {0: "Legacy", 1: "AccessList", 2: "EIP-1559"}.get(tt if isinstance(tt, int) else 0, f"Unknown({tt})")
+       """
+    Map a transaction type (int or bytes or None) to a short human-readable label.
+    """
+    mapping = {0: "Legacy", 1: "AccessList", 2: "EIP-1559"}
+    if isinstance(tt, int):
+        return mapping.get(tt, f"Unknown({tt})")
+    return mapping.get(0, "Legacy")
 
 def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_block: int) -> Dict[str, Any]:
     # receipt first (has status, gasUsed, blockNumber, effectiveGasPrice)
