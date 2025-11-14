@@ -35,6 +35,7 @@ results.append((time.strftime("%Y-%m-%d %H:%M:%S"), rpc_url, block, latency_ms, 
         writer = csv.writer(f)
         for row in results:
             writer.writerow(row)
+            if latency > args.threshold * 2: print(f"⚠️  {url} extremely slow: {latency:.0f} ms")
             print(row)
 
 if __name__ == "__main__":
