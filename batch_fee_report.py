@@ -157,11 +157,16 @@ def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(
         description="Batch analyze transaction fees and efficiency; outputs CSV or JSON."
     )
-    ap.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
-    ap.add_argument("--file", help="File with one tx hash per line (default: stdin)")
-    ap.add_argument("--limit", type=int, help="Limit number of hashes read")
-    ap.add_argument("--out", help="CSV output path (default: stdout)")
-    ap.add_argument("--json", action="store_true", help="Print JSON instead of CSV")
+   ap.add_argument("-r", "--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
+    ap.add_argument("-f", "--file", help="File with one tx hash per line (default: stdin)")
+    ap.add_argument("-l", "--limit", type=int, help="Limit number of hashes read")
+    ap.add_argument("-o", "--out", help="CSV output path (default: stdout)")
+    ap.add_argument(
+        "-j",
+        "--json",
+        action="store_true",
+        help="Print JSON instead of CSV",
+    )
     return ap.parse_args()
 
 def main():
