@@ -9,7 +9,7 @@ from typing import Dict, Any, Iterable, List, Tuple
 from web3 import Web3
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
-
+DEFAULT_TIMEOUT = float(os.getenv("RPC_TIMEOUT", "25"))
 NETWORKS = {
     1: "Ethereum Mainnet",
     11155111: "Sepolia Testnet",
@@ -23,7 +23,7 @@ def network_name(cid: int) -> str:
 
 def connect(rpc: str) -> Web3:
     start = time.time()
-    w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 25}))
+       w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": DEFAULT_TIMEOUT}))
     if not w3.is_connected():
         print("❌ Failed to connect to RPC.", file=sys.stderr)
         sys.exit(1)
