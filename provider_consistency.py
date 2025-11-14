@@ -3,6 +3,13 @@ import os
 import sys
 import time
 import argparse
+import os
+import sys
+import time
+import argparse
+from typing import Dict, Any
+from web3 import Web3
+import json
 from typing import Dict, Any
 from web3 import Web3
 
@@ -132,7 +139,6 @@ def main():
 
         cmp = compare_dicts(a, b)
         if args.json:
-            import json
             print(json.dumps({"primary": a, "secondary": b, "match": cmp}, indent=2, sort_keys=True))
             return
 
@@ -157,7 +163,6 @@ def main():
 
         cmp = compare_dicts(a, b)
         if args.json:
-            import json
             print(json.dumps({"primary": a, "secondary": b, "match": cmp}, indent=2, sort_keys=True))
             return
 
