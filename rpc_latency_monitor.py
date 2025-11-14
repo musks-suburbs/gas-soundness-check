@@ -21,6 +21,11 @@ def main():
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
+        parser.add_argument(
+        "--delimiter",
+        default=",",
+        help="CSV delimiter character",
+    )
     args = parser.parse_args()
 
     # Run once (could be looped or scheduled)
@@ -30,7 +35,7 @@ def main():
         results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
 
     with open(args.output, "a", newline="") as f:
-        writer = csv.writer(f)
+               writer = csv.writer(f, delimiter=args.delimiter)
         for row in results:
             writer.writerow(row)
             if latency > args.threshold * 2: print(f"⚠️  {url} extremely slow: {latency:.0f} ms")
