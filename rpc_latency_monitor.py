@@ -12,12 +12,15 @@ def check_endpoint(rpc_url, threshold_ms=200):
     last_block = block
     latency_ms = (time.time() - t0) * 1000
     status = "OK" if latency_ms <= threshold_ms else "SLOW"
+    
     return rpc_url, block, round(latency_ms), status
 
 def main():
     parser = argparse.ArgumentParser(description="RPC latency monitor")
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
+    if latency_ms > args.threshold * 2: print(f"⚠️  High latency detected for {rpc_url}: {latency_ms:.0f} ms")
+results.append((time.strftime("%Y-%m-%d %H:%M:%S"), rpc_url, block, latency_ms, status))
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
     args = parser.parse_args()
 
