@@ -1,4 +1,9 @@
 # provider_consistency.py
+"""Cross-verify Ethereum transactions and blocks across two RPC providers.
+
+Given a tx hash or block tag/number, this tool compares key fields and a
+keccak-based commitment to check provider soundness.
+"""
 import os
 import sys
 import time
