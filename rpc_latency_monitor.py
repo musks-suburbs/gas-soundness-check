@@ -1,7 +1,7 @@
 import time, csv, argparse, sys
 from web3 import Web3
 
-def check_endpoint(rpc_url, threshold_ms=200):
+def check_endpoint(rpc_url: str, threshold_ms: int = 200) -> tuple[str, int | None, int | None, str]:
     w3 = Web3(Web3.HTTPProvider(rpc_url, request_kwargs={"timeout":10}))
     if not w3.is_connected():
         print(f"🌐 {rpc_url} → chainId: {w3.eth.chain_id}")
@@ -16,7 +16,7 @@ def check_endpoint(rpc_url, threshold_ms=200):
     
     return rpc_url, block, round(latency_ms), status
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="RPC latency monitor")
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
