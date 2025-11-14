@@ -141,9 +141,18 @@ def main():
         print(f"🌐 SECOND.: {b['network']} (chainId {b['chainId']})  🔗 {args.tx}")
         print(f"   block={b['blockNumber']} status={b['status']} gasUsed={b['gasUsed']} commit={b['commitment']}")
         print("\n— Comparison —")
-        for k in ["chainId", "blockNumber", "status", "gasUsed", "commitment"]:
-            print(f"{k:12s}: {'✅' if cmp[k] else '❌'}")
-        if all(cmp.values()):
+               print("\n— Comparison —")
+        keys_tx = ["chainId", "blockNumber", "status", "gasUsed", "commitment"]
+        matches = 0
+        for k in keys_tx:
+            ok = cmp.get(k, False)
+            if ok:
+                matches += 1
+            print(f"{k:12s}: {'✅' if ok else '❌'}")
+        print(f"\nMatched {matches}/{len(keys_tx)} key fields.")
+        if all(cmp.get(k, False) for k in keys_tx):
+            ...
+
             print("🔒 Soundness confirmed for tx across providers.")
         else:
             print("⚠️  Inconsistencies detected. Re-check providers or try again with a specific block tag.")
