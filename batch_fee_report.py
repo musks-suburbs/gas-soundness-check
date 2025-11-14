@@ -31,7 +31,20 @@ def connect(rpc: str) -> Web3:
     return w3
 
 def is_tx_hash(s: str) -> bool:
-    return isinstance(s, str) and s.startswith("0x") and len(s) == 66
+    if not isinstance(s, str):
+        return False
+    s = s.strip()
+    if len(s) != 66:
+        return False
+    if not s.lower().startswith("0x"):
+        return False
+    # basic hex check on the part after 0x
+    try:
+        int(s[2:], 16)
+    except ValueError:
+        return False
+    return True
+
 
 def read_hashes(source_file: str | None, limit: int | None) -> List[str]:
     lines: Iterable[str]
