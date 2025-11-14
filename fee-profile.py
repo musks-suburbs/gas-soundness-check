@@ -143,9 +143,13 @@ def parse_args():
 
 def main():
     args = parse_args()
-    if args.blocks <= 0 or args.step <= 0:
-        print("❌ --blocks and --step must be > 0")
+      if args.blocks <= 0 or args.step <= 0:
+        print("❌ --blocks and --step must be > 0", file=sys.stderr)
         sys.exit(1)
+
+    if args.blocks > 5000:
+        print("⚠️  --blocks is large; this may take a while.", file=sys.stderr)
+
 
     w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step)
