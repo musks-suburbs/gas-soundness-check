@@ -160,7 +160,7 @@ if summary['gasEfficiency'] is not None:
 else:
     print("📈 Gas Efficiency: N/A (gas limit unavailable)")
 print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary['baseFeeAtTxGwei']:.2f} Gwei)")
-These two tiny changes prevent a crash on odd txs with missing gas limit and fix the current indentation
+
     print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
     if summary["totalFeeEth"] > args.warn_fee_eth:
         print(f"⚠️  High Fee Warning: {summary['totalFeeEth']:.4f} ETH exceeds threshold {args.warn_fee_eth:.4f} ETH.")
