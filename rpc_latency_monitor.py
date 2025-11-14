@@ -1,6 +1,8 @@
 import time, csv, argparse, sys
 from web3 import Web3
 
+DEFAULT_THRESHOLD = int(os.getenv("RPC_LATENCY_THRESHOLD", "200"))
+
 def check_endpoint(rpc_url, threshold_ms=200):
     w3 = Web3(Web3.HTTPProvider(rpc_url, request_kwargs={"timeout":10}))
     if not w3.is_connected():
@@ -19,7 +21,7 @@ def check_endpoint(rpc_url, threshold_ms=200):
 def main():
     parser = argparse.ArgumentParser(description="RPC latency monitor")
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
-    parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
+     parser.add_argument("-t", "--threshold", type=int, default=DEFAULT_THRESHOLD, help="Latency threshold in ms")
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
     args = parser.parse_args()
 
