@@ -46,6 +46,8 @@ def header_commitment(chain_id: int, header) -> str:
       chainId[8] || number[8] || hash[32] || parentHash[32] ||
       stateRoot[32] || receiptsRoot[32] || transactionsRoot[32] || timestamp[8]
     )
+
+    This summarizes key consensus-relevant fields of a block header for comparison.
     """
     fields = (
         int(chain_id).to_bytes(8, "big")
@@ -58,6 +60,7 @@ def header_commitment(chain_id: int, header) -> str:
         + int(header.timestamp).to_bytes(8, "big")
     )
     return "0x" + Web3.keccak(fields).hex()
+
 
 def compare_dicts(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, bool]:
     return {k: (a.get(k) == b.get(k)) for k in sorted(set(a.keys()) | set(b.keys()))}
