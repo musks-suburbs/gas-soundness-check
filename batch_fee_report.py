@@ -22,6 +22,11 @@ def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
 def connect(rpc: str) -> Web3:
+    """
+    Create a Web3 HTTP connection to the given RPC URL.
+
+    Exits the process with status code 1 if the connection cannot be established.
+    """
     start = time.time()
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 25}))
     if not w3.is_connected():
