@@ -154,6 +154,11 @@ def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
         w.writerows(rows)
 
 def parse_args() -> argparse.Namespace:
+   """
+    Parse command-line arguments for the batch fee report tool.
+
+    Supports reading tx hashes from a file or stdin and choosing CSV or JSON output.
+    """
     ap = argparse.ArgumentParser(
         description="Batch analyze transaction fees and efficiency; outputs CSV or JSON."
     )
