@@ -144,7 +144,9 @@ def main():
         return
 
     print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
-    print(f"🔗 Tx: {summary['txHash']}")
+      if summary["chainId"] == 1:
+        print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
+
     print(f"👤 From: {summary['from']}")
      to_addr = summary['to'] or "(contract creation)"
     print(f"🎯 To: {to_addr}")
