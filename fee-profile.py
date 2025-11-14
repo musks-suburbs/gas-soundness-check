@@ -8,6 +8,7 @@ from typing import Dict, List, Tuple
 from web3 import Web3
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
+DEFAULT_TIMEOUT = float(os.getenv("RPC_TIMEOUT", "30"))
 
 NETWORKS = {
     1: "Ethereum Mainnet",
@@ -20,9 +21,10 @@ NETWORKS = {
 def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
-def connect(rpc: str) -> Web3:
+def connect(rpc: str, timeout: float = DEFAULT_TIMEOUT) -> Web3:
     start = time.time()  # ✅ Start measuring RPC latency
-    w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 30}))
+    w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": timeout}))
+
     latency = time.time() - start
     if not w3.is_connected():
         print("❌ Failed to connect to RPC endpoint.")
@@ -139,6 +141,12 @@ def parse_args():
     ap.add_argument("--blocks", type=int, default=300, help="How many recent blocks to scan (default 300)")
     ap.add_argument("--step", type=int, default=3, help="Sample every Nth block for speed (default 3)")
     ap.add_argument("--json", action="store_true", help="Output JSON only")
+    ap.add_argument(
+        "--timeout",
+        type=float,
+        default=DEFAULT_TIMEOUT,
+        help="RPC HTTP timeout in seconds",
+    )
     return ap.parse_args()
 
 def main():
@@ -147,7 +155,8 @@ def main():
         print("❌ --blocks and --step must be > 0")
         sys.exit(1)
 
-    w3 = connect(args.rpc)
+       w3 = connect(args.rpc, timeout=args.timeout)
+
     result = analyze(w3, args.blocks, args.step)
 
     if args.json:
