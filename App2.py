@@ -146,7 +146,9 @@ def main():
     print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
     print(f"🔗 Tx: {summary['txHash']}")
     print(f"👤 From: {summary['from']}")
-    print(f"🎯 To: {summary['to']}")
+     to_addr = summary['to'] or "(contract creation)"
+    print(f"🎯 To: {to_addr}")
+
    status_text = "✅ Success" if summary["status"] == 1 else "❌ Failed"
    color = "green" if summary["status"] == 1 else "red"
     print(f"📦 Status: {colorize(status_text, color)}")
