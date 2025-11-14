@@ -144,9 +144,13 @@ def main():
         for k in ["chainId", "blockNumber", "status", "gasUsed", "commitment"]:
             print(f"{k:12s}: {'✅' if cmp[k] else '❌'}")
         if all(cmp.values()):
-            print("🔒 Soundness confirmed for tx across providers.")
+                    print("🔒 Soundness confirmed for tx across providers.", file=sys.stderr)
         else:
-            print("⚠️  Inconsistencies detected. Re-check providers or try again with a specific block tag.")
+            print(
+                "⚠️  Inconsistencies detected. Re-check providers or try again with a specific block tag.",
+                file=sys.stderr,
+            )
+
 
     else:
         block_id = as_int_or_tag(args.block)
@@ -169,11 +173,15 @@ def main():
         for k in ["chainId", "number", "hash", "parentHash", "stateRoot", "receiptsRoot", "transactionsRoot", "timestamp", "commitment"]:
             print(f"{k:15s}: {'✅' if cmp.get(k, False) else '❌'}")
         if all(cmp.get(k, False) for k in ["chainId", "number", "hash", "parentHash", "stateRoot", "receiptsRoot", "transactionsRoot", "timestamp", "commitment"]):
-            print("🔒 Soundness confirmed for header across providers.")
+                 print("🔒 Soundness confirmed for header across providers.", file=sys.stderr)
         else:
-            print("⚠️  Inconsistencies detected. Consider using an exact block number or different providers.")
+            print(
+                "⚠️  Inconsistencies detected. Consider using an exact block number or different providers.",
+                file=sys.stderr,
+            )
 
-    print(f"\n⏱️  Elapsed: {time.time() - t0:.2f}s")
+    print(f"\n⏱️  Elapsed: {time.time() - t0:.2f}s", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
