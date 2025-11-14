@@ -29,12 +29,15 @@ def main():
         url, block, latency, status = check_endpoint(url, args.threshold)
         results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
 
-    with open(args.output, "a", newline="") as f:
+      with open(args.output, "a", newline="") as f:
         writer = csv.writer(f)
         for row in results:
+            timestamp, url, block, latency, status = row
             writer.writerow(row)
-            if latency > args.threshold * 2: print(f"⚠️  {url} extremely slow: {latency:.0f} ms")
+            if latency is not None and latency > args.threshold * 2:
+                print(f"⚠️  {url} extremely slow: {latency:.0f} ms")
             print(row)
+
 
 if __name__ == "__main__":
     main()
