@@ -131,6 +131,12 @@ def main():
             sys.exit(0)
 
         cmp = compare_dicts(a, b)
+                if a.get("chainId") != b.get("chainId") and not args.json:
+            print(
+                f"⚠️  Providers report different chain IDs: {a.get('chainId')} vs {b.get('chainId')}.",
+                file=sys.stderr,
+            )
+
         if args.json:
             import json
             print(json.dumps({"primary": a, "secondary": b, "match": cmp}, indent=2, sort_keys=True))
