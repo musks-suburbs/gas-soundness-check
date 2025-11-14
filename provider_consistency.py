@@ -20,6 +20,7 @@ NETWORKS = {
 def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
+
 def connect(url: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": 25}))
     if not w3.is_connected():
@@ -61,7 +62,6 @@ def header_commitment(chain_id: int, header) -> str:
 
 def compare_dicts(a: Dict[str, Any], b: Dict[str, Any]) -> Dict[str, bool]:
     return {k: (a.get(k) == b.get(k)) for k in sorted(set(a.keys()) | set(b.keys()))}
-
 def fetch_tx_bundle(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     rcpt = w3.eth.get_transaction_receipt(tx_hash)
     if rcpt is None or rcpt.blockNumber is None:
