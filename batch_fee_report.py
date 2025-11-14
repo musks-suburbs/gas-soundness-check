@@ -7,7 +7,7 @@ import time
 import argparse
 from typing import Dict, Any, Iterable, List, Tuple
 from web3 import Web3
-
+__version__ = "0.1.0"
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 
 NETWORKS = {
