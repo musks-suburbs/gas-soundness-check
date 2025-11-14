@@ -166,9 +166,9 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-      print(f"🔗 Using RPC endpoint: {args.rpc}")
+    print(f"🔗 Using RPC endpoint: {args.rpc}", file=sys.stderr)
     hashes = read_hashes(args.file, args.limit)
-    print(f"🧮 Processing {len(hashes)} transaction hashes…")
+    print(f"🧮 Processing {len(hashes)} transaction hashes…", file=sys.stderr)
     if not hashes:
         print("❌ No valid transaction hashes provided.", file=sys.stderr)
         sys.exit(1)
