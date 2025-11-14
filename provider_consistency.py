@@ -19,6 +19,19 @@ NETWORKS = {
 
 def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
+def is_tx_hash(s: str) -> bool:
+    if not isinstance(s, str):
+        return False
+    s = s.strip()
+    if len(s) != 66:
+        return False
+    if not s.lower().startswith("0x"):
+        return False
+    try:
+        int(s[2:], 16)
+    except ValueError:
+        return False
+    return True
 
 def connect(url: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": 25}))
@@ -120,8 +133,8 @@ def main():
     w3b = connect(args.rpc2)
 
     if args.tx:
-        if not (args.tx.startswith("0x") and len(args.tx) == 66):
-            print("❌ Invalid tx hash.")
+        if not is_tx_hash(args.tx):
+            print("❌ Invalid tx hash.", file=sys.stderr)
             sys.exit(1)
         a = fetch_tx_bundle(w3a, args.tx)
         b = fetch_tx_bundle(w3b, args.tx)
