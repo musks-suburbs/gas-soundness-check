@@ -69,13 +69,18 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
     start = max(0, head - blocks + 1)
     t0 = time.time()
     basefees, eff_prices, tips = [], [], []
-    
+        first_ts = None  # timestamp of head block in our sample
+    last_ts = None   # timestamp of oldest sampled block
+
 
     print(f"🔍 Scanning the last {blocks} blocks (every {step}th block)...")
 
     # Iterate backwards in steps for speed
     for n in range(head, start - 1, -step):
         blk = w3.eth.get_block(n, full_transactions=True)
+                if first_ts is None:
+            first_ts = int(blk.timestamp)
+        last_ts = int(blk.timestamp)
         bf = int(blk.get("baseFeePerGas", 0))
         basefees.append(float(Web3.from_wei(bf, "gwei")))
         eff_gwei, tip_gwei = sample_block_fees(blk, bf)
@@ -88,14 +93,13 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
 
     elapsed = time.time() - t0
 
-    # ✅ Estimate average block time
-    if len(basefees) >= 2:
-        first_block = w3.eth.get_block(head)
-        last_block = w3.eth.get_block(start)
-        time_diff = first_block.timestamp - last_block.timestamp
-        block_time_avg = time_diff / (head - start) if head > start else 0
+    # ✅ Estimate average block time from sampled timestamps
+    if first_ts is not None and last_ts is not None and head > start:
+        time_diff = first_ts - last_ts
+        block_time_avg = time_diff / (head - start)
     else:
         block_time_avg = 0
+
 
     return {
         "chainId": int(w3.eth.chain_id),
