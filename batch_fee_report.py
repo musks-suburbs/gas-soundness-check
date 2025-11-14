@@ -94,8 +94,13 @@ def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_blo
     tip_wei = max(0, int(eff_price_wei) - base_fee_wei)
     total_fee_eth = float(Web3.from_wei(int(rcpt.gasUsed) * int(eff_price_wei), "ether"))
 
-    gas_limit = int(getattr(tx, "gas", tx.get("gas", 0)))
-    gas_eff = (int(rcpt.gasUsed) / gas_limit * 100.0) if gas_limit else None
+      gas_limit = int(getattr(tx, "gas", tx.get("gas", 0)))
+    gas_eff = None
+    if gas_limit:
+        raw_eff = int(rcpt.gasUsed) / gas_limit * 100.0
+        # clamp to [0, 100] for safety
+        gas_eff = max(0.0, min(raw_eff, 100.0))
+
 
     age_min = (time.time() - ts) / 60.0
     confirmations = max(0, int(latest_block) - block_num)
