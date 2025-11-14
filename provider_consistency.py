@@ -21,11 +21,19 @@ def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
 def connect(url: str) -> Web3:
+    start = time.time()
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": 25}))
     if not w3.is_connected():
-        print(f"❌ Failed to connect: {url}")
+        print(f"❌ Failed to connect: {url}", file=sys.stderr)
         sys.exit(1)
+    chain_id = int(w3.eth.chain_id)
+    print(
+        f"⚡ Connected to {network_name(chain_id)} (chainId {chain_id}) via {url} "
+        f"in {time.time() - start:.2f}s",
+        file=sys.stderr,
+    )
     return w3
+
 
 def tx_commitment(chain_id: int, tx_hash: str, rcpt) -> str:
     """
