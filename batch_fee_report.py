@@ -21,9 +21,10 @@ NETWORKS = {
 def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
-def connect(rpc: str) -> Web3:
+def connect(rpc: str, timeout: float = 25.0) -> Web3:
     start = time.time()
-    w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 25}))
+    w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": timeout}))
+
     if not w3.is_connected():
         print("❌ Failed to connect to RPC.", file=sys.stderr)
         sys.exit(1)
@@ -158,6 +159,12 @@ def parse_args() -> argparse.Namespace:
         description="Batch analyze transaction fees and efficiency; outputs CSV or JSON."
     )
     ap.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
+        ap.add_argument(
+        "--timeout",
+        type=float,
+        default=25.0,
+        help="RPC timeout in seconds (default: 25)",
+    )
     ap.add_argument("--file", help="File with one tx hash per line (default: stdin)")
     ap.add_argument("--limit", type=int, help="Limit number of hashes read")
     ap.add_argument("--out", help="CSV output path (default: stdout)")
