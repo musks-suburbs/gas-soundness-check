@@ -1,4 +1,8 @@
-# fee_profile.py
+"""Profile recent gas behavior on an EVM network.
+
+Samples recent blocks and computes percentiles for base fee, effective gas price,
+and priority tip (approx.) in Gwei.
+"""
 import os
 import sys
 import time
