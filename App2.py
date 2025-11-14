@@ -55,10 +55,11 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
         sys.exit(2)
         
         # ✅ New code: check if tx is pending
-    tx = w3.eth.get_transaction(tx_hash)
-    if tx and tx.blockNumber is None:
-        print("⏳ Transaction is still pending — not yet mined.")
-        sys.exit(0)
+      try:
+        tx = w3.eth.get_transaction(tx_hash)
+        gas_limit = tx.gas
+        gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
+
 
     if rcpt is None or rcpt.blockNumber is None:
         print("❌ Transaction not found or incomplete data.")
