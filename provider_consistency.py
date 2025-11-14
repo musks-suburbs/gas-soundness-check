@@ -94,15 +94,22 @@ def fetch_block_bundle(w3: Web3, block_id) -> Dict[str, Any]:
     }
 
 def parse_args():
-    ap = argparse.ArgumentParser(
-        description="Cross-verify soundness of a tx or block across two RPC providers."
-    )
-    ap.add_argument("--rpc1", default=DEFAULT_RPC1, help="Primary RPC URL")
-    ap.add_argument("--rpc2", default=DEFAULT_RPC2, help="Secondary RPC URL")
+    ap.add_argument("-1", "--rpc1", default=DEFAULT_RPC1, help="Primary RPC URL")
+    ap.add_argument("-2", "--rpc2", default=DEFAULT_RPC2, help="Secondary RPC URL")
     mode = ap.add_mutually_exclusive_group(required=True)
-    mode.add_argument("--tx", help="Transaction hash (0x...) to compare")
-    mode.add_argument("--block", help="Block tag/number: latest|finalized|safe|pending or integer")
-    ap.add_argument("--json", action="store_true", help="Print JSON result")
+    mode.add_argument("-t", "--tx", help="Transaction hash (0x...) to compare")
+    mode.add_argument(
+        "-b",
+        "--block",
+        help="Block tag/number: latest|finalized|safe|pending or integer",
+    )
+    ap.add_argument(
+        "-j",
+        "--json",
+        action="store_true",
+        help="Print JSON result",
+    )
+
     return ap.parse_args()
 
 def as_int_or_tag(s: str):
