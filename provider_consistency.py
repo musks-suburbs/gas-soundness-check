@@ -126,9 +126,10 @@ def main():
         a = fetch_tx_bundle(w3a, args.tx)
         b = fetch_tx_bundle(w3b, args.tx)
 
-        if a.get("statusText") == "pending_or_not_found" or b.get("statusText") == "pending_or_not_found":
-            print("⏳ Pending or not found on at least one provider.")
+              if a.get("statusText") == "pending_or_not_found" or b.get("statusText") == "pending_or_not_found":
+            print("⏳ Pending or not found on at least one provider.", file=sys.stderr)
             sys.exit(0)
+
 
         cmp = compare_dicts(a, b)
         if args.json:
