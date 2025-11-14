@@ -65,6 +65,7 @@ def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float
     return eff, tip
 
 def analyze(w3: Web3, blocks: int, step: int) -> Dict:
+        sampled_blocks = 0
     head = int(w3.eth.block_number)
     start = max(0, head - blocks + 1)
     t0 = time.time()
@@ -76,6 +77,7 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
     # Iterate backwards in steps for speed
     for n in range(head, start - 1, -step):
         blk = w3.eth.get_block(n, full_transactions=True)
+                sampled_blocks += 1
         bf = int(blk.get("baseFeePerGas", 0))
         basefees.append(float(Web3.from_wei(bf, "gwei")))
         eff_gwei, tip_gwei = sample_block_fees(blk, bf)
@@ -98,6 +100,7 @@ def analyze(w3: Web3, blocks: int, step: int) -> Dict:
         block_time_avg = 0
 
     return {
+        
         "chainId": int(w3.eth.chain_id),
         "network": network_name(int(w3.eth.chain_id)),
         "avgBlockTimeSec": round(block_time_avg, 2),
