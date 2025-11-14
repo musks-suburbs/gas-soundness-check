@@ -5,7 +5,7 @@ import csv
 import json
 import time
 import argparse
-from typing import Dict, Any, Iterable, List, Tuple
+from typing import Dict, Any, Iterable, List
 from web3 import Web3
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
