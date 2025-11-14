@@ -66,6 +66,9 @@ def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float
 
 def analyze(w3: Web3, blocks: int, step: int) -> Dict:
         sampled_blocks = 0
+            "startBlock": start,
+        "endBlock": head,
+
     head = int(w3.eth.block_number)
     start = max(0, head - blocks + 1)
     t0 = time.time()
@@ -156,7 +159,12 @@ def main():
         return
 
     print(f"🌐 {result['network']} (chainId {result['chainId']})  head={result['head']}")
-    print(f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} (step={result['step']}) in {result['timingSec']}s") 
+      print(
+        f"📦 Scanned ~{result['sampledBlocks']} blocks "
+        f"(from {result['startBlock']} to {result['endBlock']}, span={result['blockSpan']}) "
+        f"(step={result['step']}) in {result['timingSec']}s"
+    )
+
     bf = result["baseFeeGwei"]
     ep = result["effectivePriceGwei"]
     tp = result["tipGweiApprox"]
