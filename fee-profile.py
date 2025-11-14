@@ -6,7 +6,7 @@ import argparse
 from statistics import median
 from typing import Dict, List, Tuple
 from web3 import Web3
-
+__version__ = "0.1.0"
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 
 NETWORKS = {
@@ -139,10 +139,20 @@ def parse_args():
     ap.add_argument("--blocks", type=int, default=300, help="How many recent blocks to scan (default 300)")
     ap.add_argument("--step", type=int, default=3, help="Sample every Nth block for speed (default 3)")
     ap.add_argument("--json", action="store_true", help="Output JSON only")
+    ap.add_argument(
+        "--version",
+        action="store_true",
+        help="Print version and exit",
+    )
+
     return ap.parse_args()
 
 def main():
-    args = parse_args()
+  args = parse_args()
+    if getattr(args, "version", False):
+        print(f"fee_profile version {__version__}")
+        return
+
     if args.blocks <= 0 or args.step <= 0:
         print("❌ --blocks and --step must be > 0")
         sys.exit(1)
