@@ -8,6 +8,17 @@ from web3 import Web3
 
 DEFAULT_RPC1 = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 DEFAULT_RPC2 = os.getenv("RPC_URL_2", "https://rpc.ankr.com/eth")
+if "your_api_key" in DEFAULT_RPC1:
+    print(
+        "⚠️  RPC_URL environment variable is not set and DEFAULT_RPC1 uses a placeholder key.",
+        file=sys.stderr,
+    )
+
+if DEFAULT_RPC1 == DEFAULT_RPC2:
+    print(
+        "⚠️  RPC_URL and RPC_URL_2 resolve to the same URL; comparisons may be less useful.",
+        file=sys.stderr,
+    )
 
 NETWORKS = {
     1: "Ethereum Mainnet",
