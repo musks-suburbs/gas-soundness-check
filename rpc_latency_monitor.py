@@ -21,13 +21,24 @@ def main():
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
+        parser.add_argument(
+        "--utc",
+        action="store_true",
+        help="Use UTC timestamps instead of local time",
+    )
     args = parser.parse_args()
 
     # Run once (could be looped or scheduled)
-    results = []
+      results = []
     for url in args.rpcs:
         url, block, latency, status = check_endpoint(url, args.threshold)
-        results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
+        if args.utc:
+            ts = time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime())
+        else:
+            ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        results.append((ts, url, block, latency, status))
+
+
 
     with open(args.output, "a", newline="") as f:
         writer = csv.writer(f)
