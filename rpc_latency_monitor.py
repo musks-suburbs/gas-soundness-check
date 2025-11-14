@@ -18,16 +18,21 @@ def check_endpoint(rpc_url, threshold_ms=200):
 
 def main():
     parser = argparse.ArgumentParser(description="RPC latency monitor")
+        parser.add_argument("--iterations", type=int, default=1, help="How many times to repeat the check")
+    parser.add_argument("--interval", type=float, default=5.0, help="Seconds between iterations")
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
     args = parser.parse_args()
 
     # Run once (could be looped or scheduled)
-    results = []
-    for url in args.rpcs:
-        url, block, latency, status = check_endpoint(url, args.threshold)
-        results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
+       results = []
+    for i in range(args.iterations):
+        for url in args.rpcs:
+            url, block, latency, status = check_endpoint(url, args.threshold)
+            results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
+        if i < args.iterations - 1:
+            time.sleep(args.interval)
 
     with open(args.output, "a", newline="") as f:
         writer = csv.writer(f)
