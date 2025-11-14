@@ -139,6 +139,7 @@ def parse_args():
     ap.add_argument("--blocks", type=int, default=300, help="How many recent blocks to scan (default 300)")
     ap.add_argument("--step", type=int, default=3, help="Sample every Nth block for speed (default 3)")
     ap.add_argument("--json", action="store_true", help="Output JSON only")
+    ap.add_argument("--quiet", action="store_true", help="Suppress human-readable summary output")
     return ap.parse_args()
 
 def main():
@@ -155,18 +156,22 @@ def main():
         print(json.dumps(result, indent=2, sort_keys=True))
         return
 
-    print(f"🌐 {result['network']} (chainId {result['chainId']})  head={result['head']}")
-    print(f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} (step={result['step']}) in {result['timingSec']}s") 
-    bf = result["baseFeeGwei"]
-    ep = result["effectivePriceGwei"]
-    tp = result["tipGweiApprox"]
-    print(f"🕒 Average Block Time: {result['avgBlockTimeSec']} seconds")
-    print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
-    print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
-    print(f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  (n={tp['count']})")
-    print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
-    # ✅ Add timestamp footer
-    print(f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
+    if not args.quiet:
+        print(f"🌐 {result['network']} (chainId {result['chainId']})  head={result['head']}")
+        print(
+            f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} "
+            f"(step={result['step']}) in {result['timingSec']}s"
+        )
+        bf = result["baseFeeGwei"]
+        ep = result["effectivePriceGwei"]
+        tp = result["tipGweiApprox"]
+        print(f"🕒 Average Block Time: {result['avgBlockTimeSec']} seconds")
+        print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
+        print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
+        print(f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  (n={tp['count']})")
+        print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
+        print(f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
+
 
 if __name__ == "__main__":
     main()
