@@ -149,6 +149,9 @@ def main():
 
     w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step)
+    if result["effectivePriceGwei"]["count"] == 0:
+        print("❌ No transactions sampled; consider increasing --blocks or decreasing --step.", file=sys.stderr)
+        sys.exit(1)
 
     if args.json:
         import json
