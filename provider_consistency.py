@@ -103,6 +103,11 @@ def parse_args():
     mode.add_argument("--tx", help="Transaction hash (0x...) to compare")
     mode.add_argument("--block", help="Block tag/number: latest|finalized|safe|pending or integer")
     ap.add_argument("--json", action="store_true", help="Print JSON result")
+    ap.add_argument(
+        "--strict-exit",
+        action="store_true",
+        help="Exit with code 1 if any mismatch is detected between providers",
+    )
     return ap.parse_args()
 
 def as_int_or_tag(s: str):
@@ -143,10 +148,15 @@ def main():
         print("\n— Comparison —")
         for k in ["chainId", "blockNumber", "status", "gasUsed", "commitment"]:
             print(f"{k:12s}: {'✅' if cmp[k] else '❌'}")
-        if all(cmp.values()):
+          all_match = all(cmp.values())
+        if all_match:
             print("🔒 Soundness confirmed for tx across providers.")
         else:
             print("⚠️  Inconsistencies detected. Re-check providers or try again with a specific block tag.")
+
+        if args.strict_exit and not all_match:
+            sys.exit(1)
+
 
     else:
         block_id = as_int_or_tag(args.block)
@@ -168,10 +178,26 @@ def main():
         print("\n— Comparison —")
         for k in ["chainId", "number", "hash", "parentHash", "stateRoot", "receiptsRoot", "transactionsRoot", "timestamp", "commitment"]:
             print(f"{k:15s}: {'✅' if cmp.get(k, False) else '❌'}")
-        if all(cmp.get(k, False) for k in ["chainId", "number", "hash", "parentHash", "stateRoot", "receiptsRoot", "transactionsRoot", "timestamp", "commitment"]):
+              keys = [
+            "chainId",
+            "number",
+            "hash",
+            "parentHash",
+            "stateRoot",
+            "receiptsRoot",
+            "transactionsRoot",
+            "timestamp",
+            "commitment",
+        ]
+        all_match = all(cmp.get(k, False) for k in keys)
+        if all_match:
             print("🔒 Soundness confirmed for header across providers.")
         else:
             print("⚠️  Inconsistencies detected. Consider using an exact block number or different providers.")
+
+        if args.strict_exit and not all_match:
+            sys.exit(1)
+
 
     print(f"\n⏱️  Elapsed: {time.time() - t0:.2f}s")
 
