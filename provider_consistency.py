@@ -105,13 +105,18 @@ def parse_args():
     ap.add_argument("--json", action="store_true", help="Print JSON result")
     return ap.parse_args()
 
-def as_int_or_tag(s: str):
+def as_int_or_tag(s: str | None):
     if s is None:
         return "latest"
     low = s.lower()
     if low in ("latest", "finalized", "safe", "pending"):
         return low
-    return int(s, 0)
+    try:
+        return int(s, 0)
+    except ValueError:
+        print(f"❌ Invalid block identifier: {s!r}", file=sys.stderr)
+        sys.exit(1)
+
 
 def main():
     args = parse_args()
