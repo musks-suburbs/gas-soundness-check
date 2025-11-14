@@ -21,11 +21,27 @@ def main():
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
+        parser.add_argument(
+        "--rpcs-from-file",
+        help="Path to a file containing one RPC URL per line",
+    )
     args = parser.parse_args()
+    rpc_urls = list(args.rpcs) if args.rpcs else []
+
+    if args.rpcs_from_file:
+        with open(args.rpcs_from_file, "r", encoding="utf-8") as f:
+            for line in f:
+                url = line.strip()
+                if url:
+                    rpc_urls.append(url)
+
+    if not rpc_urls:
+        print("❌ No RPC URLs provided.", file=sys.stderr)
+        sys.exit(1)
 
     # Run once (could be looped or scheduled)
-    results = []
-    for url in args.rpcs:
+      results = []
+    for url in rpc_urls:
         url, block, latency, status = check_endpoint(url, args.threshold)
         results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
 
