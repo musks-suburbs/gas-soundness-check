@@ -25,9 +25,9 @@ def connect(rpc: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 30}))
     latency = time.time() - start
     if not w3.is_connected():
-        print("❌ Failed to connect to RPC endpoint.")
+        print("❌ Failed to connect to RPC endpoint.", file=sys.stderr)
         sys.exit(1)
-    print(f"⚡ RPC connected in {latency:.2f}s")
+    print(f"⚡ RPC connected in {latency:.2f}s", file=sys.stderr)
     return w3
 
 
