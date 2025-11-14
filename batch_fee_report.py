@@ -136,12 +136,26 @@ def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
         return
     # consistent column order
     cols = [
-        "txHash","status","txType","blockNumber","utc","confirmations",
-        "from","to","valueEth",
-        "gasUsed","gasLimit","gasEfficiencyPct",
-        "effectiveGasPriceGwei","baseFeeAtTxGwei","tipAtTxGwei","totalFeeEth",
-        "ageMinutes"
+        "txHash",
+        "status",
+        "txType",
+        "blockNumber",
+        "utc",
+        "localTime",
+        "confirmations",
+        "from",
+        "to",
+        "valueEth",
+        "gasUsed",
+        "gasLimit",
+        "gasEfficiencyPct",
+        "effectiveGasPriceGwei",
+        "baseFeeAtTxGwei",
+        "tipAtTxGwei",
+        "totalFeeEth",
+        "ageMinutes",
     ]
+
     if out_path:
         with open(out_path, "w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=cols)
