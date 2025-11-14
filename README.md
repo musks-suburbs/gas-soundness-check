@@ -49,3 +49,9 @@ Optionally specify an RPC:
 - Gas used, gas price (effective if EIP-1559), base fee at tx block
 - Total ETH fee, with optional high-fee warning
 - Elapsed time
+
+### Contributing  
+Contributions welcome! Please open an issue or submit a pull request.
+
+### License  
+MIT License – see LICENSE file for details.
