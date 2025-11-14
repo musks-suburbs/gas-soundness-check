@@ -21,6 +21,11 @@ def main():
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
+        parser.add_argument(
+        "--summary-only",
+        action="store_true",
+        help="Print only a summary instead of per-endpoint rows",
+    )
     args = parser.parse_args()
 
     # Run once (could be looped or scheduled)
@@ -35,6 +40,14 @@ def main():
             writer.writerow(row)
             if latency > args.threshold * 2: print(f"⚠️  {url} extremely slow: {latency:.0f} ms")
             print(row)
+    # Simple summary
+    total = len(results)
+    ok = sum(1 for _, _, _, latency, status in results if status == "OK")
+    slow = sum(1 for _, _, _, latency, status in results if status == "SLOW")
+    disconnected = sum(1 for _, _, _, latency, status in results if status == "DISCONNECTED")
+
+    if args.summary_only:
+        print(f"Summary: total={total}, OK={ok}, SLOW={slow}, DISCONNECTED={disconnected}")
 
 if __name__ == "__main__":
     main()
