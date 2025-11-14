@@ -24,9 +24,13 @@ def main():
     args = parser.parse_args()
 
     # Run once (could be looped or scheduled)
-    results = []
-    for url in args.rpcs:
-        url, block, latency, status = check_endpoint(url, args.threshold)
+       results = []
+    for i in range(args.iterations):
+        for url in args.rpcs:
+            if not (url.startswith("http://") or url.startswith("https://")):
+                print(f"⚠️  Skipping invalid RPC URL: {url}", file=sys.stderr)
+                continue
+            url, block, latency, status = check_endpoint(url, args.threshold)
         results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
 
     with open(args.output, "a", newline="") as f:
