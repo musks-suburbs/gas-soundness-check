@@ -18,6 +18,7 @@ def check_endpoint(rpc_url, threshold_ms=200):
 
 def main():
     parser = argparse.ArgumentParser(description="RPC latency monitor")
+        parser.add_argument("--no-log", action="store_true", help="Do not append results to CSV")
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
@@ -29,7 +30,8 @@ def main():
         url, block, latency, status = check_endpoint(url, args.threshold)
         results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
 
-    with open(args.output, "a", newline="") as f:
+        if not args.no_log:
+        with open(args.output, "a", newline="") as f:
         writer = csv.writer(f)
         for row in results:
             writer.writerow(row)
