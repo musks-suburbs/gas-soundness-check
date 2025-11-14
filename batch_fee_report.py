@@ -44,6 +44,7 @@ def read_hashes(source_file: str | None, limit: int | None) -> List[str]:
         lines = sys.stdin.readlines()
 
     hashes: List[str] = []
+    invalid_count = 0
     for raw in lines:
         h = raw.strip()
         if not h:
@@ -51,10 +52,16 @@ def read_hashes(source_file: str | None, limit: int | None) -> List[str]:
         if is_tx_hash(h):
             hashes.append(h)
         else:
+            invalid_count += 1
             print(f"⚠️  Skipping invalid hash: {h}", file=sys.stderr)
         if limit and len(hashes) >= limit:
             break
+
+    if invalid_count:
+        print(f"ℹ️  Skipped {invalid_count} invalid hash(es).", file=sys.stderr)
+
     return hashes
+
 
 def safe_call(fn, *args, retries=2, delay=0.8, **kwargs):
     for attempt in range(1, retries+1):
