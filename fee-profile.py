@@ -64,9 +64,8 @@ def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float
             tip.append(float(Web3.from_wei(max(0, gp - bf), "gwei")))
     return eff, tip
 
-def analyze(w3: Web3, blocks: int, step: int) -> Dict:
-        sampled_blocks = 0
-    head = int(w3.eth.block_number)
+def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) -> Dict:
+    head = int(head_override) if head_override is not None else int(w3.eth.block_number)
     start = max(0, head - blocks + 1)
     t0 = time.time()
     basefees, eff_prices, tips = [], [], []
@@ -139,6 +138,12 @@ def parse_args():
     ap.add_argument("--blocks", type=int, default=300, help="How many recent blocks to scan (default 300)")
     ap.add_argument("--step", type=int, default=3, help="Sample every Nth block for speed (default 3)")
     ap.add_argument("--json", action="store_true", help="Output JSON only")
+        ap.add_argument(
+        "--head",
+        type=int,
+        help="Use this block number as the head instead of the latest",
+    )
+
     return ap.parse_args()
 
 def main():
@@ -147,8 +152,8 @@ def main():
         print("❌ --blocks and --step must be > 0")
         sys.exit(1)
 
-    w3 = connect(args.rpc)
-    result = analyze(w3, args.blocks, args.step)
+      w3 = connect(args.rpc)
+    result = analyze(w3, args.blocks, args.step, args.head)
 
     if args.json:
         import json
