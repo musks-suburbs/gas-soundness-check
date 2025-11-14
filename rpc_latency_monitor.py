@@ -21,6 +21,11 @@ def main():
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
+        parser.add_argument(
+        "--sort-by-latency",
+        action="store_true",
+        help="Sort endpoints by latency (descending) before writing",
+    )
     args = parser.parse_args()
 
     # Run once (could be looped or scheduled)
@@ -28,6 +33,9 @@ def main():
     for url in args.rpcs:
         url, block, latency, status = check_endpoint(url, args.threshold)
         results.append((time.strftime("%Y-%m-%d %H:%M:%S"), url, block, latency, status))
+    if args.sort_by_latency:
+        # results: (timestamp, url, block, latency, status)
+        results.sort(key=lambda r: (r[3] is None, r[3]), reverse=True)
 
     with open(args.output, "a", newline="") as f:
         writer = csv.writer(f)
