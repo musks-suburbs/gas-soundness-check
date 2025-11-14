@@ -12,7 +12,14 @@ def check_endpoint(rpc_url, threshold_ms=200):
     last_block = block
     latency_ms = (time.time() - t0) * 1000
     print(f"🔍 Endpoint {rpc_url} returned block {block} in {latency_ms:.0f} ms")
-    status = "OK" if latency_ms <= threshold_ms else "SLOW"
+    if latency_ms is None:
+        status = "DISCONNECTED"
+    elif latency_ms <= threshold_ms:
+        status = "OK"
+    elif latency_ms <= threshold_ms * 2:
+        status = "SLOW"
+    else:
+        status = "VERY_SLOW"
     
     return rpc_url, block, round(latency_ms), status
 
