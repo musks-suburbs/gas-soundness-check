@@ -15,7 +15,12 @@ NETWORKS = {
     10: "Optimism",
     137: "Polygon",
     42161: "Arbitrum One",
+    56: "BNB Smart Chain",
+    8453: "Base",
+    43114: "Avalanche C-Chain",
+    100: "Gnosis Chain",
 }
+
 
 def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
