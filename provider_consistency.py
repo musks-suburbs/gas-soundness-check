@@ -136,10 +136,25 @@ def main():
             sys.exit(0)
 
         cmp = compare_dicts(a, b)
-        if args.json:
-            import json
-            print(json.dumps({"primary": a, "secondary": b, "match": cmp}, indent=2, sort_keys=True))
+              if args.json:
+            print(
+                json.dumps(
+                    {
+                        "mode": "tx",
+                        "providers": {
+                            "primaryUrl": args.rpc1,
+                            "secondaryUrl": args.rpc2,
+                        },
+                        "primary": a,
+                        "secondary": b,
+                        "match": cmp,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
             return
+
 
         print(f"🌐 PRIMARY: {a['network']} (chainId {a['chainId']})  🔗 {args.tx}")
         print(f"   block={a['blockNumber']} status={a['status']} gasUsed={a['gasUsed']} commit={a['commitment']}")
@@ -166,10 +181,25 @@ def main():
         b = fetch_block_bundle(w3b, b_block_id)
 
         cmp = compare_dicts(a, b)
-        if args.json:
-            import json
-            print(json.dumps({"primary": a, "secondary": b, "match": cmp}, indent=2, sort_keys=True))
+             if args.json:
+            print(
+                json.dumps(
+                    {
+                        "mode": "block",
+                        "providers": {
+                            "primaryUrl": args.rpc1,
+                            "secondaryUrl": args.rpc2,
+                        },
+                        "primary": a,
+                        "secondary": b,
+                        "match": cmp,
+                    },
+                    indent=2,
+                    sort_keys=True,
+                )
+            )
             return
+
 
         print(f"🌐 PRIMARY: {a['network']} (chainId {a['chainId']})  🔢 {a['number']}")
         print(f"   hash={a['hash']}")
