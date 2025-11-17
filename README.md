@@ -8,6 +8,16 @@
 This repository contains a small Python script that checks the **soundness of transaction gas usage** on Ethereum or any EVM-compatible chain.  
 It connects to an RPC endpoint, fetches live gas metrics, retrieves a transaction receipt, and reports detailed gas and fee information.
 
+### Getting Started
+1. Clone the repo  
+   `git clone https://github.com/musks-suburbs/gas-soundness-check.git`
+
+2. Install dependencies  
+   `pip install web3`
+
+3. Run a basic scan  
+   `python scanner.py --rpc https://mainnet.infura.io/v3/YOUR_KEY --blocks 300 --step 3`
+
 ## Features
 - Connects to Ethereum or testnets
 - Prints transaction sender, recipient, and block info
