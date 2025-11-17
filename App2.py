@@ -194,5 +194,8 @@ print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary
     import time
 print(f"🕒 Total runtime so far: {time.process_time():.2f} seconds (CPU time)")
 
+import datetime
+print(f"🏁 Finished at {datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
+
 if __name__ == "__main__":
     main()
