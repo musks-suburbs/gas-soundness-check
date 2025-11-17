@@ -152,7 +152,7 @@ def parse_args() -> argparse.Namespace:
 
     return ap.parse_args()
 
-def main():
+def main() -> None:
     args = parse_args()
     if args.blocks <= 0 or args.step <= 0:
         print("❌ --blocks and --step must be > 0")
