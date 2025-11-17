@@ -86,7 +86,8 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
         if block.number == 0: print("⛳ genesis block; no previous"); sys.exit(0)
         blk = w3.eth.get_block(n, full_transactions=True)
                 sampled_blocks += 1
-        bf = int(blk.get("baseFeePerGas", 0))
+               bf = int(getattr(blk, "baseFeePerGas", blk.get("baseFeePerGas", 0)))
+
         basefees.append(float(Web3.from_wei(bf, "gwei")))
         eff_gwei, tip_gwei = sample_block_fees(blk, bf)
         eff_prices.extend(eff_gwei)
