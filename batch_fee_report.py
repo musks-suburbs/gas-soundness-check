@@ -202,6 +202,8 @@ def main():
             print(f"⚠️  Failed to process {h}: {e}", file=sys.stderr)
         if i % 10 == 0:
             print(f"🔍 Processed {i}/{len(hashes)}...", file=sys.stderr)
+    # sort rows by blockNumber if available
+    rows.sort(key=lambda r: r.get("blockNumber", 0))
 
     if args.json:
         print(json.dumps({
