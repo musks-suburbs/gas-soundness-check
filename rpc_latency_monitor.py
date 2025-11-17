@@ -22,7 +22,11 @@ def check_endpoint(rpc_url, threshold_ms=200):
     return rpc_url, block, round(latency_ms), status
 
 def main():
-    parser = argparse.ArgumentParser(description="RPC latency monitor")
+       parser = argparse.ArgumentParser(
+        description="RPC latency monitor",
+        epilog="Example: python rpc_latency_monitor.py --rpcs https://rpc.ankr.com/eth https://mainnet.infura.io/v3/KEY",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument("--rpcs", nargs="+", required=True, help="List of RPC URLs")
     parser.add_argument("--threshold", type=int, default=200, help="Latency threshold in ms")
     parser.add_argument("--output", default="rpc_latency_log.csv", help="Output log file path")
