@@ -7,7 +7,7 @@ import os
 import sys
 import time
 import argparse
-
+__version__ = "0.1.0"
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 DEFAULT_BLOCKS = int(os.getenv("FEE_PROFILE_BLOCKS", "300"))
@@ -154,6 +154,11 @@ def parse_args() -> argparse.Namespace:
         type=int,
         help="Use this block number as the head instead of the latest",
     )
+    ap.add_argument(
+        "--version",
+        action="store_true",
+        help="Print script version and exit",
+    )
 
     return ap.parse_args()
 
@@ -164,7 +169,9 @@ def main() -> None:
     if args.blocks <= 0 or args.step <= 0:
         print("❌ --blocks and --step must be > 0")
         sys.exit(1)
-
+ if args.version:
+        print(f"fee_profile version {__version__}")
+        return
       w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step, args.head)
 
