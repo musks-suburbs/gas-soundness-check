@@ -8,6 +8,8 @@ from typing import Dict, List, Tuple
 from web3 import Web3
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
+DEFAULT_BLOCKS = int(os.getenv("FEE_PROFILE_BLOCKS", "300"))
+DEFAULT_STEP = int(os.getenv("FEE_PROFILE_STEP", "3"))
 
 NETWORKS = {
     1: "Ethereum Mainnet",
@@ -135,8 +137,8 @@ def parse_args():
         description="Profile recent gas: base fee, effective price, and priority tip percentiles."
     )
     ap.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
-    ap.add_argument("--blocks", type=int, default=300, help="How many recent blocks to scan (default 300)")
-    ap.add_argument("--step", type=int, default=3, help="Sample every Nth block for speed (default 3)")
+       ap.add_argument("-b", "--blocks", type=int, default=DEFAULT_BLOCKS, help="How many recent blocks to scan")
+    ap.add_argument("-s", "--step", type=int, default=DEFAULT_STEP, help="Sample every Nth block for speed")
     ap.add_argument("--json", action="store_true", help="Output JSON only")
         ap.add_argument(
         "--head",
