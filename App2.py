@@ -134,12 +134,20 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
     p.add_argument("--json", action="store_true", help="Print JSON instead of human-readable output")
     p.add_argument("--warn-fee-eth", type=float, default=0.05, help="Warn if fee exceeds this ETH (default 0.05)")
+    p.add_argument(
+        "--no-color",
+        action="store_true",
+        help="Disable ANSI colors in output",
+    )
     return p.parse_args()
 def colorize(text, color):
     return text  # простой безопасный вариант без цветов
 
 def main():
     args = parse_args()
+    if args.no_color:
+        # Override colorize to a no-op
+        globals()["colorize"] = lambda text, color=None: text
 from datetime import datetime
 print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
     if not is_tx_hash(args.tx_hash):
