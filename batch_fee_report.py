@@ -44,8 +44,8 @@ def connect(rpc: str) -> Web3:
     """
     start = time.time()
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 25}))
-    if not w3.is_connected():
-        print("❌ Failed to connect to RPC.", file=sys.stderr)
+     if not w3.is_connected():
+        print(f"❌ Failed to connect to RPC: {rpc}", file=sys.stderr)
         sys.exit(1)
     print(f"⚡ Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id}) in {time.time()-start:.2f}s")
     return w3
