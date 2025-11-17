@@ -177,6 +177,8 @@ def as_int_or_tag(s: str | None):
 
 def main():
     args = parse_args()
+     import platform
+    print(f"🏷️ Running on host: {platform.node()}")
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
