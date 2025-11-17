@@ -156,9 +156,14 @@ def main():
     result = analyze(w3, args.blocks, args.step, args.head)
 
     if args.json:
-        import json
-        print(json.dumps(result, indent=2, sort_keys=True))
+        payload = {
+            "mode": "fee_profile",
+            "generatedAtUtc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
+            "data": result,
+        }
+        print(json.dumps(payload, indent=2, sort_keys=True))
         return
+
 
     print(f"🌐 {result['network']} (chainId {result['chainId']})  head={result['head']}")
     print(f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} (step={result['step']}) in {result['timingSec']}s") 
