@@ -132,9 +132,10 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
         },
     }
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(
-        description="Profile recent gas: base fee, effective price, and priority tip percentiles."
+        description="Profile recent gas: base fee, effective price, and priority tip percentiles.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     ap.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
        ap.add_argument("-b", "--blocks", type=int, default=DEFAULT_BLOCKS, help="How many recent blocks to scan")
