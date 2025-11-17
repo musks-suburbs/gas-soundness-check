@@ -145,8 +145,13 @@ def tx_type_label(tt) -> str:
     return mapping.get(0, "Legacy")
 
 def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_block: int) -> Dict[str, Any]:
+    """
+    Fetch transaction + receipt + block and return a flat summary dict suitable
+    for CSV/JSON export. Uses block_cache to avoid refetching blocks.
+    """
     # receipt first (has status, gasUsed, blockNumber, effectiveGasPrice)
     rcpt = safe_call(w3.eth.get_transaction_receipt, tx_hash)
+
     if rcpt is None or rcpt.blockNumber is None:
         return {"txHash": tx_hash, "statusText": "pending_or_not_found"}
 
