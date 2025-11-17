@@ -191,6 +191,6 @@ print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary
 
 
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
-
+print("✅ Script executed successfully without errors.")
 if __name__ == "__main__":
     main()
