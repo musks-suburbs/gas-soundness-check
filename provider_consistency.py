@@ -282,8 +282,11 @@ print("✅ Both RPC connections established successfully.")
         all_match = all(cmp.get(k, False) for k in keys)
         if all_match:
             print("🔒 Soundness confirmed for header across providers.")
-        else:
-            print("⚠️  Inconsistencies detected. Consider using an exact block number or different providers.")
+          else:
+    print("⚠️  Inconsistencies detected. Re-check providers or try again with a specific block tag.")
+if all(cmp.values()): 
+    print("✅ All fields match across providers — full consistency confirmed.")
+
 
         if args.strict_exit and not all_match:
             sys.exit(1)
