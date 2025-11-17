@@ -37,6 +37,7 @@ def is_tx_hash(s: str) -> bool:
 def connect(url: str) -> Web3:
     start = time.time()
     w3 = Web3(Web3.HTTPProvider(url, request_kwargs={"timeout": 25}))
+    supports_1559 = bool(w3.eth.fee_history(1, 'latest').get('baseFeePerGas', 0)) ; print(f"⛽ EIP-1559 support: {'yes' if supports_1559 else 'no'}")
     if not w3.is_connected():
         print(f"❌ Failed to connect: {url}", file=sys.stderr)
         sys.exit(1)
