@@ -82,11 +82,12 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
     print(f"🔍 Scanning the last {blocks} blocks (every {step}th block)...")
 
     # Iterate backwards in steps for speed
+    sampled_blocks = 0
     for n in range(head, start - 1, -step):
-        if block.number == 0: print("⛳ genesis block; no previous"); sys.exit(0)
         blk = w3.eth.get_block(n, full_transactions=True)
-                sampled_blocks += 1
-        bf = int(blk.get("baseFeePerGas", 0))
+        sampled_blocks += 1
+        bf = int(getattr(blk, "baseFeePerGas", blk.get("baseFeePerGas", 0)))
+
         basefees.append(float(Web3.from_wei(bf, "gwei")))
         eff_gwei, tip_gwei = sample_block_fees(blk, bf)
         eff_prices.extend(eff_gwei)
