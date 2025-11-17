@@ -103,8 +103,9 @@ gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
 
     total_fee_wei = int(rcpt.gasUsed) * int(gas_price_wei or 0)
     
-   # ✅ Get miner/validator address
-    miner_address = block.get("miner", "N/A")
+      # Get miner/validator address
+    miner_address = getattr(block, "miner", "N/A")
+
     
     return {
          "gasEfficiency": round(gas_efficiency, 2) if gas_efficiency is not None else None,
