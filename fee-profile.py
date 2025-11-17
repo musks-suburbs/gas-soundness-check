@@ -7,6 +7,7 @@ import os
 import sys
 import time
 import argparse
+import json
 
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
