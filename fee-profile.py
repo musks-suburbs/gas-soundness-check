@@ -7,10 +7,7 @@ import os
 import sys
 import time
 import argparse
-print(f"📅 Fee-Profile run started at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
-from statistics import median
-from typing import Dict, List, Tuple
-from web3 import Web3
+
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 DEFAULT_BLOCKS = int(os.getenv("FEE_PROFILE_BLOCKS", "300"))
@@ -162,6 +159,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+        print(f"📅 Fee-Profile run started at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
     print(f"⚙️ Using RPC endpoint: {args.rpc}")
     if args.blocks <= 0 or args.step <= 0:
         print("❌ --blocks and --step must be > 0")
