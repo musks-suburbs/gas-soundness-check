@@ -202,8 +202,9 @@ def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_blo
         "utc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(ts)),
         "localTime": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts)),
         "confirmations": confirmations,
-        "from": tx["from"],
-        "to": tx["to"],
+              "from": tx.get("from"),
+        "to": tx.get("to"),
+
         "valueEth": float(Web3.from_wei(tx.get("value", 0), "ether")),
         "gasUsed": int(rcpt.gasUsed),
         "gasLimit": gas_limit,
