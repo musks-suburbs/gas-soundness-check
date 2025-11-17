@@ -104,19 +104,12 @@ def read_hashes(source_file: str | None, limit: int | None) -> List[str]:
 def safe_call(fn, *args, retries=2, delay=0.8, **kwargs):
     """
     Call an RPC function with simple retry logic.
-
-    :param fn: callable to execute
-    :param retries: total number of attempts
-    :param delay: delay between attempts in seconds
-    :return: result of fn(*args, **kwargs) or re-raises the last exception
     """
-    for attempt in range(1, retries+1):
-        ...
-
+    for attempt in range(1, retries + 1):
         try:
             return fn(*args, **kwargs)
         except Exception as e:
-                 if attempt == retries:
+            if attempt == retries:
                 raise
             remaining = retries - attempt
             print(
