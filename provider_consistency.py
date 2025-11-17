@@ -290,6 +290,7 @@ print("✅ Both RPC connections established successfully.")
 
 
     print(f"\n⏱️  Elapsed: {time.time() - t0:.2f}s")
+print(f"⏱️ Total comparison time: {round(time.time() - t0, 2)}s")
 
 if __name__ == "__main__":
     main()
