@@ -88,6 +88,7 @@ def main():
 print(f"⏰ Script started at: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}")
 
     w3 = connect(args.rpc)
+    print(f"🔍 Checking chainId {w3.eth.chain_id} on network: {network_name(w3.eth.chain_id)}")
     print(f"🌐 Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id})")
 
     tx_hash = parse_hash(args.tx_hash)
