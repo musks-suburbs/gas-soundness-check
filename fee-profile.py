@@ -25,15 +25,17 @@ def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
 def connect(rpc: str) -> Web3:
-    start = time.time()  # ✅ Start measuring RPC latency
+    start = time.time()
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 30}))
-    latest = w3.eth.block_number;  print(f"🌐 chainId={w3.eth.chain_id} tip={latest}")
-    latency = time.time() - start
     if not w3.is_connected():
-        print("❌ Failed to connect to RPC endpoint.", file=sys.stderr)
+        print(f"❌ Failed to connect to RPC endpoint: {rpc}", file=sys.stderr)
         sys.exit(1)
+    latest = w3.eth.block_number
+    print(f"🌐 chainId={w3.eth.chain_id} tip={latest}")
+    latency = time.time() - start
     print(f"⚡ RPC connected in {latency:.2f}s", file=sys.stderr)
     return w3
+
 
 
 def pct(values: List[float], q: float) -> float:
