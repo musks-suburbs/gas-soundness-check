@@ -161,8 +161,9 @@ start_time = time.time()
 print(f"⏱️  Elapsed: {time.time() - start_time:.2f}s")
 
     print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
-      if summary["chainId"] == 1:
+    if summary["chainId"] == 1:
         print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
+
 
     print(f"👤 From: {summary['from']}")
      to_addr = summary['to'] or "(contract creation)"
