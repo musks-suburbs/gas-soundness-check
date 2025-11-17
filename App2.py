@@ -36,15 +36,15 @@ def fmt_utc(ts: int) -> str:
 
 # ---------- Core (optimized: minimal RPC calls) ----------
 def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
-    
     """
-    Optimized plan (minimize RPC round-trips):
-      1) eth_chainId                                  -> chain id
-      2) eth_getTransactionReceipt(tx)                -> status, gasUsed, effGasPrice, blockNumber, from, to
-      3) eth_getBlockByNumber(blockNumber, false)     -> timestamp, baseFeePerGas (at tx block)
-      4) eth_blockNumber                              -> latest (to compute confirmations)
-    No eth_getTransaction call needed (receipt already contains from/to on modern clients).
+    Fetch a minimal but rich summary of a transaction:
+    - network / chain ID
+    - status, gas used, gas efficiency
+    - block, timestamp, confirmations
+    - miner/validator address
+    - fee breakdown (gas price, total fee, base fee at block)
     """
+
     chain_id = w3.eth.chain_id
 
     # (2) receipt
