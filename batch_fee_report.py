@@ -189,6 +189,7 @@ def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_blo
     return {
         "txHash": tx_hash,
         "status": int(rcpt.status),
+                "statusText": "success" if int(rcpt.status) == 1 else "failed",
         "blockNumber": block_num,
                "timestamp": ts,
         "utc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(ts)),
