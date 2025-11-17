@@ -136,7 +136,15 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--warn-fee-eth", type=float, default=0.05, help="Warn if fee exceeds this ETH (default 0.05)")
     return p.parse_args()
 def colorize(text, color):
-    return text  # простой безопасный вариант без цветов
+    colors = {
+        "red": "\033[31m",
+        "green": "\033[32m",
+        "yellow": "\033[33m",
+        "reset": "\033[0m",
+    }
+    prefix = colors.get(color, "")
+    reset = colors["reset"] if prefix else ""
+    return f"{prefix}{text}{reset}"
 
 def main():
     args = parse_args()
