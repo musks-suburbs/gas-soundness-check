@@ -1,4 +1,18 @@
 # batch_fee_report.py
+"""Batch fee and gas-efficiency reporter for Ethereum-style networks.
+
+Reads a list of transaction hashes (from a file or stdin), queries an RPC,
+and outputs a CSV or JSON summary of gas usage and fees.
+"""
+import os
+import sys
+import csv
+import json
+import time
+import argparse
+from typing import Dict, Any, Iterable, List, Tuple
+from web3 import Web3
+
 import os
 import sys
 import csv
