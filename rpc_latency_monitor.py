@@ -7,6 +7,14 @@ def color(text: str, code: str, enabled: bool = True) -> str:
     return f"\033[{code}m{text}\033[0m"
 
 def check_endpoint(rpc_url, threshold_ms=200):
+        """
+    Check a single RPC endpoint and return (rpc_url, block_number, latency_ms, status).
+
+    status is one of:
+      - "DISCONNECTED" if the node is unreachable
+      - "OK" if latency <= threshold_ms
+      - "SLOW" otherwise
+    """
     w3 = Web3(Web3.HTTPProvider(rpc_url, request_kwargs={"timeout":10}))
     if not w3.is_connected():
         print(f"🌐 {rpc_url} → chainId: {w3.eth.chain_id}")
