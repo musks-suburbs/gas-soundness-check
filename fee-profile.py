@@ -168,9 +168,11 @@ def main() -> None:
       w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step, args.head)
 
-    if args.json:
+      if args.json:
         payload = {
             "mode": "fee_profile",
+            "network": result["network"],
+            "chainId": result["chainId"],
             "generatedAtUtc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
             "data": result,
         }
