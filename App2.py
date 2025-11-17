@@ -147,9 +147,9 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
         sys.exit(1)
 
     t0 = time.time()
+    start_connect = time.time()
     w3 = connect(args.rpc)
-    start_time = time.time()
-    print(f"⚡ RPC latency: {time.time() - start_time:.3f}s")
+    print(f"⚡ RPC latency: {time.time() - start_connect:.3f}s")
     summary = fetch_tx_summary(w3, args.tx_hash)
 
     if args.json:
