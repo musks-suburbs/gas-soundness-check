@@ -264,15 +264,10 @@ def parse_args() -> argparse.Namespace:
 
 def main():
     args = parse_args()
-        ap.add_argument(
-        "--sleep",
-        type=float,
-        default=0.0,
-        help="Sleep N seconds between transactions (default: 0)",
-    )
-      print(f"🔗 Using RPC endpoint: {args.rpc}")
-hashes = read_hashes(args.file, args.limit)
-print(f"🧮 Total transactions read: {len(hashes)}")
+    print(f"🔗 Using RPC endpoint: {args.rpc}")
+    hashes = read_hashes(args.file, args.limit)
+    print(f"🧮 Total transactions read: {len(hashes)}")
+
 
     print(f"🧮 Processing {len(hashes)} transaction hashes…")
     if not hashes:
