@@ -36,8 +36,11 @@ def connect(rpc: str) -> Web3:
 def pct(values: List[float], q: float) -> float:
     if not values:
         return 0.0
-    idx = max(0, min(len(values)-1, int(round(q * (len(values)-1)))))
-    return sorted(values)[idx]
+    q = max(0.0, min(1.0, q))
+    sorted_vals = sorted(values)
+    idx = int(round(q * (len(sorted_vals) - 1)))
+    return sorted_vals[idx]
+
 
 def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float]]:
     """
