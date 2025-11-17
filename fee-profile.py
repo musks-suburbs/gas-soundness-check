@@ -100,9 +100,12 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
 
     # ✅ Estimate average block time
     if len(basefees) >= 2:
-        first_block = w3.eth.get_block(head)
+             first_block = w3.eth.get_block(head)
         last_block = w3.eth.get_block(start)
-        import datetime; print(f"🕒 Latest block timestamp: {datetime.datetime.utcfromtimestamp(block.timestamp)} UTC")
+        print(
+            f"🕒 Latest block timestamp: "
+            f"{datetime.datetime.utcfromtimestamp(first_block.timestamp)} UTC"
+        )
         time_diff = first_block.timestamp - last_block.timestamp
         block_time_avg = time_diff / (head - start) if head > start else 0
     else:
