@@ -146,6 +146,8 @@ def main():
 
     t0 = time.time()
     w3 = connect(args.rpc)
+    start_time = time.time()
+    print(f"⚡ RPC latency: {time.time() - start_time:.3f}s")
     summary = fetch_tx_summary(w3, args.tx_hash)
 
     if args.json:
