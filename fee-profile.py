@@ -162,6 +162,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    print(f"⚙️ Using RPC endpoint: {args.rpc}")
     if args.blocks <= 0 or args.step <= 0:
         print("❌ --blocks and --step must be > 0")
         sys.exit(1)
