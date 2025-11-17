@@ -261,7 +261,11 @@ def parse_args() -> argparse.Namespace:
         help="Print JSON instead of CSV",
     )
     return ap.parse_args()
-
+# ✅ Optional logging setup
+    if args.log:
+        sys.stdout = open(args.log, "w")
+        sys.stderr = sys.stdout
+        print(f"🗒️  Logging enabled — all output will be saved to {args.log}")
 def main():
     args = parse_args()
         ap.add_argument(
