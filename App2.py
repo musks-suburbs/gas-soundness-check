@@ -146,6 +146,7 @@ def main():
 
     t0 = time.time()
     w3 = connect(args.rpc)
+    if w3.client_version and "infura" in w3.client_version.lower(): print("⚙️  Connected via Infura — RPC latency may vary.")
     summary = fetch_tx_summary(w3, args.tx_hash)
 
     if args.json:
