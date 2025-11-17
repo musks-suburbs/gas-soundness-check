@@ -191,6 +191,8 @@ print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary
 
 
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
+    import time
+print(f"🕒 Total runtime so far: {time.process_time():.2f} seconds (CPU time)")
 
 if __name__ == "__main__":
     main()
