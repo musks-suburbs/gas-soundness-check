@@ -44,6 +44,16 @@ Run the script with a transaction hash:
 Optionally specify an RPC:
 'python app.py 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa --rpc https://rpc.ankr.com/eth'
 
+#### Examples  
+- Scan recent blocks for gas outliers:  
+  `python scanner.py --rpc … --blocks 500 --step 2`
+
+- Compare two RPC providers for transaction consistency:  
+  `python provider_consistency.py --rpc1 … --rpc2 … --tx 0x…`
+
+- Estimate transaction cost:  
+  `python gas_cost_estimator.py --rpc … --gas-used 1_000_000 --tip-gwei 2`
+
 ## Example Output
 - 🌐 Connected to Ethereum Mainnet (chainId 1)
 - 🔗 Transaction: 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
