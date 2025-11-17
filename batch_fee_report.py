@@ -299,9 +299,10 @@ print(f"🔗 Using RPC endpoint: {args.rpc}")
     rows.sort(key=lambda r: r.get("blockNumber", 0))
 
     if args.json:
+        chain_id = int(w3.eth.chain_id)
         print(json.dumps({
-            "network": network_name(w3.eth.chain_id),
-            "chainId": int(w3.eth.chain_id),
+            "network": network_name(chain_id),
+            "chainId": chain_id,
             "count": len(rows),
             "generatedAtUtc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
             "rows": rows
