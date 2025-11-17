@@ -67,9 +67,10 @@ if tx and tx.blockNumber is None:
         gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
 
 
-    if rcpt is None or rcpt.blockNumber is None:
-        print("❌ Transaction not found or incomplete data.")
+      if rcpt is None or rcpt.blockNumber is None:
+        print("❌ Транзакция не найдена или ещё не включена в блок.")
         sys.exit(0)
+
         
  # ✅ Calculate gas efficiency (used / limit)
     try:
