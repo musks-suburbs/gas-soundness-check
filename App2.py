@@ -141,6 +141,8 @@ def colorize(text, color):
     return text  # простой безопасный вариант без цветов
 
 def main():
+    import platform
+    print(f"📦 Running on Python {platform.python_version()} on {platform.system()}")
     args = parse_args()
 from datetime import datetime
 print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
