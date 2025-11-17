@@ -148,6 +148,11 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
 
     t0 = time.time()
     w3 = connect(args.rpc)
+    try:
+        cid = w3.eth.chain_id
+        print(f"🌐 Detected network: {network_name(cid)} (chainId {cid})")
+    except Exception:
+        print("🌐 Network detection failed.")
     start_time = time.time()
     print(f"⚡ RPC latency: {time.time() - start_time:.3f}s")
     summary = fetch_tx_summary(w3, args.tx_hash)
