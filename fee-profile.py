@@ -7,6 +7,7 @@ import os
 import sys
 import time
 import argparse
+import datetime
 
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
@@ -102,7 +103,6 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
     if len(basefees) >= 2:
         first_block = w3.eth.get_block(head)
         last_block = w3.eth.get_block(start)
-        import datetime; print(f"🕒 Latest block timestamp: {datetime.datetime.utcfromtimestamp(block.timestamp)} UTC")
         time_diff = first_block.timestamp - last_block.timestamp
         block_time_avg = time_diff / (head - start) if head > start else 0
     else:
