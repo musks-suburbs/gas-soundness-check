@@ -164,6 +164,10 @@ def main() -> None:
     if args.blocks <= 0 or args.step <= 0:
         print("❌ --blocks and --step must be > 0")
         sys.exit(1)
+        # ✅ Prevent huge block scans that could overload the RPC
+    if args.blocks > 5000:
+        print("⚠️  Limiting --blocks to 5000 to avoid excessive RPC load.")
+        args.blocks = 5000
 
       w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step, args.head)
