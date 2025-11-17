@@ -298,7 +298,7 @@ print(f"🔗 Using RPC endpoint: {args.rpc}")
     # sort rows by blockNumber if available
     rows.sort(key=lambda r: r.get("blockNumber", 0))
 
-    if args.json:
+     if args.json:
         print(json.dumps({
             "network": network_name(w3.eth.chain_id),
             "chainId": int(w3.eth.chain_id),
@@ -309,8 +309,10 @@ print(f"🔗 Using RPC endpoint: {args.rpc}")
     else:
         to_csv(rows, args.out)
         print(f"📅 Report generated at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
-print(f"⏱️ Batch analysis completed in {round(time.time() - t0, 2)} seconds.")
+
+    print(f"⏱️ Batch analysis completed in {round(time.time() - t0, 2)} seconds.")
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s", file=sys.stderr)
+
 
 if __name__ == "__main__":
     main()
