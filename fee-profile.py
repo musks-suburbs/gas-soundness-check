@@ -29,6 +29,7 @@ def network_name(cid: int) -> str:
 def connect(rpc: str) -> Web3:
     start = time.time()  # ✅ Start measuring RPC latency
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 30}))
+    latest = w3.eth.block_number;  print(f"🌐 chainId={w3.eth.chain_id} tip={latest}")
     latency = time.time() - start
     if not w3.is_connected():
         print("❌ Failed to connect to RPC endpoint.", file=sys.stderr)
