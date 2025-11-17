@@ -168,8 +168,8 @@ print(f"⏱️  Elapsed: {time.time() - start_time:.2f}s")
      to_addr = summary['to'] or "(contract creation)"
     print(f"🎯 To: {to_addr}")
 
-   status_text = "✅ Success" if summary["status"] == 1 else "❌ Failed"
-   color = "green" if summary["status"] == 1 else "red"
+      status_text = "✅ Success" if summary["status"] == 1 else "❌ Failed"
+    color = "green" if summary["status"] == 1 else "red"
     print(f"📦 Status: {colorize(status_text, color)}")
     print(f"🔢 Block: {summary['blockNumber']}  🕒 {fmt_utc(summary['timestamp'])} UTC  ✅ Confirmations: {summary['confirmations']}")
     print(f"⛏️  Miner/Validator: {summary['miner']}")
