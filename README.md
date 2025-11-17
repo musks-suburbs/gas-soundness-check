@@ -25,6 +25,11 @@ It connects to an RPC endpoint, fetches live gas metrics, retrieves a transactio
 - Fetches live base fee and suggested gas price
 - Simple and portable — one file, minimal dependencies
 
+## Prerequisites  
+- Python 3.8+ (tested)  
+- `web3.py` library  
+- Access to an Ethereum-compatible RPC endpoint  
+
 ## Installation
 1) Create a virtual environment (optional).
 2) Install dependency:
