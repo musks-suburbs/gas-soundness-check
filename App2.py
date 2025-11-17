@@ -26,8 +26,8 @@ def is_tx_hash(s: str) -> bool:
 
 def connect(rpc: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 20}))
-    if not w3.is_connected():
-        print("❌ Failed to connect to RPC.")
+      if not w3.is_connected():
+        print(f"❌ Failed to connect to RPC: {rpc}")
         sys.exit(1)
     return w3
 
