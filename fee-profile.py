@@ -165,7 +165,7 @@ def main() -> None:
         print("❌ --blocks and --step must be > 0")
         sys.exit(1)
 
-      w3 = connect(args.rpc)
+          w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step, args.head)
 
     if args.json:
