@@ -67,18 +67,18 @@ if tx and tx.blockNumber is None:
         gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
 
 
-      if rcpt is None or rcpt.blockNumber is None:
-        print("❌ Транзакция не найдена или ещё не включена в блок.")
+         if rcpt is None or rcpt.blockNumber is None:
+        print("❌ Transaction not found or not yet included in a block.")
         sys.exit(0)
 
-        
- # ✅ Calculate gas efficiency (used / limit)
+    # Calculate gas efficiency (used / limit)
     try:
         tx = w3.eth.get_transaction(tx_hash)
-       gas_limit = tx.gas
-gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
+        gas_limit = tx.gas
+        gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
     except Exception:
         gas_efficiency = None
+
         
     # (3) block at tx inclusion
     try:
