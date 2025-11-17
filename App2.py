@@ -165,7 +165,7 @@ print(f"⏱️  Elapsed: {time.time() - start_time:.2f}s")
         print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
 
     print(f"👤 From: {summary['from']}")
-     to_addr = summary['to'] or "(contract creation)"
+    to_addr = summary['to'] or "(contract creation)"
     print(f"🎯 To: {to_addr}")
 
    status_text = "✅ Success" if summary["status"] == 1 else "❌ Failed"
