@@ -75,7 +75,12 @@ def is_tx_hash(s: str) -> bool:
 
 
 def read_hashes(source_file: str | None, limit: int | None) -> List[str]:
+    """
+    Read transaction hashes from a file or stdin, filter invalid ones,
+    and respect the optional limit.
+    """
     lines: Iterable[str]
+
     if source_file:
         with open(source_file, "r", encoding="utf-8") as f:
             lines = f.readlines()
