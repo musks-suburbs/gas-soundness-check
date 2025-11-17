@@ -182,7 +182,7 @@ def main():
     t0 = time.time()
     w3a = connect(args.rpc1)
     w3b = connect(args.rpc2)
-
+print("✅ Both RPC connections established successfully.")
     if args.tx:
         if not is_tx_hash(args.tx):
             print("❌ Invalid tx hash.", file=sys.stderr)
