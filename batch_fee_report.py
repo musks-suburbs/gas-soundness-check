@@ -119,10 +119,16 @@ def safe_call(fn, *args, retries=2, delay=0.8, **kwargs):
         try:
             return fn(*args, **kwargs)
         except Exception as e:
-            if attempt == retries:
+                 if attempt == retries:
                 raise
-            print(f"⚠️  RPC call failed ({e}); retrying {attempt}/{retries-1}...", file=sys.stderr)
+            remaining = retries - attempt
+            print(
+                f"⚠️  RPC call failed ({e}); retrying in {delay}s "
+                f"({remaining} retry{'s' if remaining != 1 else ''} left)...",
+                file=sys.stderr,
+            )
             time.sleep(delay)
+
 
 def tx_type_label(tt) -> str:
        """
