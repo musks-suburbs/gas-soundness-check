@@ -86,6 +86,7 @@ gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
     except Exception as e:
         print(f"❌ Failed to fetch tx block: {e}")
         sys.exit(2)
+          miner_address = block.get("miner", "N/A")  # ✅ Capture miner/validator
 
     # (4) latest for confirmations
     latest = w3.eth.block_number
@@ -107,6 +108,7 @@ gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
     miner_address = block.get("miner", "N/A")
     
     return {
+        "miner": miner_address,
          "gasEfficiency": round(gas_efficiency, 2) if gas_efficiency is not None else None,
         "chainId": int(chain_id),
         "miner": miner_address,
