@@ -184,16 +184,20 @@ def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_blo
         except Exception:
             raw_type = 0
 
+     status_int = int(rcpt.status)
+    status_text = "success" if status_int == 1 else "reverted"
+
     return {
         "txHash": tx_hash,
-        "status": int(rcpt.status),
+        "status": status_int,
+        "statusText": status_text,
         "blockNumber": block_num,
                "timestamp": ts,
         "utc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(ts)),
         "localTime": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts)),
         "confirmations": confirmations,
-        "from": tx["from"],
-        "to": tx["to"],
+        "from": tx.get("from"),
+        "to": tx.get("to"),
         "valueEth": float(Web3.from_wei(tx.get("value", 0), "ether")),
         "gasUsed": int(rcpt.gasUsed),
         "gasLimit": gas_limit,
@@ -205,6 +209,7 @@ def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_blo
         "txType": tx_type_label(int(raw_type) if raw_type is not None else 0),
         "ageMinutes": round(age_min, 2),
     }
+
 
 def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
     if not rows:
