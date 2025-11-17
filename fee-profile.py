@@ -7,6 +7,7 @@ import os
 import sys
 import time
 import argparse
+print(f"📅 Fee-Profile run started at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
 from statistics import median
 from typing import Dict, List, Tuple
 from web3 import Web3
