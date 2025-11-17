@@ -161,8 +161,8 @@ def main() -> None:
     args = parse_args()
         print(f"📅 Fee-Profile run started at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
     print(f"⚙️ Using RPC endpoint: {args.rpc}")
-    if args.blocks <= 0 or args.step <= 0:
-        print("❌ --blocks and --step must be > 0")
+        if args.blocks <= 0 or args.step <= 0:
+        print("❌ --blocks and --step must be > 0", file=sys.stderr)
         sys.exit(1)
 
       w3 = connect(args.rpc)
