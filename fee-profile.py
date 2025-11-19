@@ -3,6 +3,8 @@
 Samples recent blocks and computes percentiles for base fee, effective gas price,
 and priority tip (approx.) in Gwei.
 """
+__version__ = "0.1.0"
+
 import os
 import sys
 import time
@@ -154,6 +156,12 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
     }
 
 def parse_args() -> argparse.Namespace:
+        ap.add_argument(
+        "--version",
+        action="store_true",
+        help="Print version and exit",
+    )
+
     ap = argparse.ArgumentParser(
         description="Profile recent gas: base fee, effective price, and priority tip percentiles.",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -173,6 +181,10 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+        if args.version:
+        print(f"fee_profile version {__version__}")
+        return
+
         print(f"📅 Fee-Profile run started at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
     print(f"⚙️ Using RPC endpoint: {args.rpc}")
         if args.blocks <= 0 or args.step <= 0:
