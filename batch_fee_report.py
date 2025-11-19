@@ -4,7 +4,9 @@
 Reads a list of transaction hashes (from a file or stdin), queries an RPC,
 and outputs a CSV or JSON summary of gas usage and fees.
 """
-
+if __name__ == "__main__":
+    # CLI entrypoint
+    main()
 import os
 import sys
 import csv
@@ -333,5 +335,5 @@ print(f"🧮 Total transactions read: {len(hashes)}")
 print(f"⏱️ Batch analysis completed in {round(time.time() - t0, 2)} seconds.")
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s", file=sys.stderr)
 
-if __name__ == "__main__":
+
     main()
