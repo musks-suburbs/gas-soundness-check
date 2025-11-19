@@ -217,13 +217,18 @@ print(f"⏱️  Elapsed: {time.time() - start_time:.2f}s")
     if summary["confirmations"] < 3:
         print("⚠️ Low confirmations: consider waiting for more blocks before relying on this tx.")
     print(f"⛏️  Miner/Validator: {summary['miner']}")
-    print(f"⛽ Gas Used: {summary['gasUsed']}")
+       print(f"⛽ Gas Used: {summary['gasUsed']}")
     gas_eff = summary.get("gasEfficiency")
-    print(f"📈 Gas Efficiency: {gas_eff:.2f}% of gas limit used" if gas_eff is not None else "📈 Gas Efficiency: N/A (gas limit unavailable)")
+    if gas_eff is not None:
+        print(f"📈 Gas Efficiency: {gas_eff:.2f}% of gas limit used")
+    else:
+        print("📈 Gas Efficiency: N/A (gas limit unavailable)")
 
-else:
-    print("📈 Gas Efficiency: N/A (gas limit unavailable)")
-print(f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  (BaseFee@tx: {summary['baseFeeAtTxGwei']:.2f} Gwei)")
+    print(
+        f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  "
+        f"(BaseFee@tx: {summary['baseFeeAtTxGwei']:.2f} Gwei)"
+    )
+
 
     print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
       if args.warn_fee_eth > 0 and summary["totalFeeEth"] > args.warn_fee_eth:
