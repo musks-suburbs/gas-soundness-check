@@ -72,7 +72,7 @@ def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float
             tip.append(float(Web3.from_wei(max(0, gp - bf), "gwei")))
     return eff, tip
 
-def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) -> Dict:
+def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) -> Dict[str, object]:
     head = int(head_override) if head_override is not None else int(w3.eth.block_number)
     start = max(0, head - blocks + 1)
     t0 = time.time()
