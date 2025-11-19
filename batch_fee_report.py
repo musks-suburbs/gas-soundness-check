@@ -4,6 +4,11 @@
 Reads a list of transaction hashes (from a file or stdin), queries an RPC,
 and outputs a CSV or JSON summary of gas usage and fees.
 """
+# Example:
+#   python batch_fee_report.py \
+#       --rpc https://mainnet.infura.io/v3/YOUR_KEY \
+#       --file tx_hashes.txt \
+#       --out report.csv
 
 import os
 import sys
