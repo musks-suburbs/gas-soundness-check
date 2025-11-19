@@ -47,18 +47,22 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     """
     chain_id = w3.eth.chain_id
 
-    # (2) receipt
+       # (2) receipt
     try:
         rcpt = w3.eth.get_transaction_receipt(tx_hash)
-        # Проверяем, не находится ли транзакция в ожидании
-tx = w3.eth.get_transaction(tx_hash)
-if tx and tx.blockNumber is None:
-    print("⏳ Транзакция находится в мемпуле — блок ещё не присвоен.")
-    sys.exit(0)
-
     except Exception as e:
         print(f"❌ Failed to fetch receipt: {e}")
         sys.exit(2)
+
+    # Check if tx is still pending
+    try:
+        tx = w3.eth.get_transaction(tx_hash)
+        if tx is not None and tx.blockNumber is None:
+            print("⏳ Transaction is pending (not yet included in a block).")
+            sys.exit(0)
+    except Exception:
+        pass
+
         
         # ✅ New code: check if tx is pending
       try:
