@@ -242,7 +242,7 @@ def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
             w = csv.DictWriter(f, fieldnames=cols)
             w.writeheader()
             w.writerows(rows)
-        print(f"📄 CSV written to {out_path}")
+               print(f"📄 CSV written to {out_path}", file=sys.stderr)
     else:
         w = csv.DictWriter(sys.stdout, fieldnames=cols)
         w.writeheader()
