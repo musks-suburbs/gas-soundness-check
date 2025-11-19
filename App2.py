@@ -26,10 +26,11 @@ def is_tx_hash(s: str) -> bool:
 
 def connect(rpc: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 20}))
-      if not w3.is_connected():
-        print(f"❌ Failed to connect to RPC: {rpc}")
+    if not w3.is_connected():
+        print(f"❌ Failed to connect to RPC: {rpc}", file=sys.stderr)
         sys.exit(1)
     return w3
+
 
 def fmt_utc(ts: int) -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(ts))
