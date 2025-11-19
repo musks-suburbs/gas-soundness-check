@@ -154,6 +154,8 @@ def main():
     import platform
     print(f"📦 Running on Python {platform.python_version()} on {platform.system()}")
     args = parse_args()
+    if not args.rpc.startswith(("http://", "https://")):
+        print("⚠️ RPC URL does not start with http:// or https://; continuing anyway.")
 from datetime import datetime
 print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
     if not is_tx_hash(args.tx_hash):
