@@ -170,7 +170,7 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
         print("❌ Invalid transaction hash format.")
         sys.exit(1)
 
-    t0 = time.time()
+  t0 = time.monotonic()
     w3 = connect(args.rpc)
     try:
         cid = w3.eth.chain_id
@@ -184,7 +184,7 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
         status_text = "success" if summary["status"] == 1 else "failed"
         print(f"📦 Status: {status_text}")
         print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
-        print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
+          print(f"⏱️  Elapsed: {time.monotonic() - t0:.2f}s")
         return
 
     if args.json:
