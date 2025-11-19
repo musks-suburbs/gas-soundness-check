@@ -168,13 +168,16 @@ def main() -> None:
     args = parse_args()
         print(f"📅 Fee-Profile run started at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
     print(f"⚙️ Using RPC endpoint: {args.rpc}")
-    if args.blocks <= 0 or args.step <= 0:
-        print("❌ --blocks and --step must be > 0")
+        if args.blocks <= 0 or args.step <= 0:
+        print("❌ --blocks and --step must be > 0", file=sys.stderr)
+                if args.blocks > 100_000:
+        print("⚠️  --blocks is very large; this may take a long time.", file=sys.stderr)
         sys.exit(1)
         # ✅ Prevent huge block scans that could overload the RPC
     if args.blocks > 5000:
         print("⚠️  Limiting --blocks to 5000 to avoid excessive RPC load.")
         args.blocks = 5000
+
 
       w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step, args.head)
