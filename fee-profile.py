@@ -173,25 +173,29 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-        print(f"📅 Fee-Profile run started at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
-    print(f"⚙️ Using RPC endpoint: {args.rpc}")
-        if args.blocks <= 0 or args.step <= 0:
+
+    print(f"📅 Fee-profile run started at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
+    print(f"⚙️ Using RPC endpoint: {args.rpc}", file=sys.stderr)
+
+    if args.blocks <= 0 or args.step <= 0:
         print("❌ --blocks and --step must be > 0", file=sys.stderr)
-                if args.blocks > 100_000:
-        print("⚠️  --blocks is very large; this may take a long time.", file=sys.stderr)
         sys.exit(1)
-        # ✅ Prevent huge block scans that could overload the RPC
+
+    if args.blocks > 100_000:
+        print("⚠️  --blocks is very large; this may take a long time.", file=sys.stderr)
+
+    # Prevent huge scans by default
     if args.blocks > 5000:
-        print("⚠️  Limiting --blocks to 5000 to avoid excessive RPC load.")
+        print("⚠️  Limiting --blocks to 5000 to avoid excessive RPC load.", file=sys.stderr)
         args.blocks = 5000
 
-
-          w3 = connect(args.rpc)
+    w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step, args.head)
+
     if result["sampledBlocks"] == 0:
         print("⚠️  No blocks were sampled. Check --blocks/--step and head range.", file=sys.stderr)
 
-      if args.json:
+    if args.json:
         payload = {
             "mode": "fee_profile",
             "network": result["network"],
@@ -202,24 +206,30 @@ def main() -> None:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return
 
-
     print(f"🌐 {result['network']} (chainId {result['chainId']})  head={result['head']}")
-    print(f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} (step={result['step']}) in {result['timingSec']}s") 
+    print(
+        f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} "
+        f"(step={result['step']}) in {result['timingSec']}s"
+    )
+
     bf = result["baseFeeGwei"]
     ep = result["effectivePriceGwei"]
     tp = result["tipGweiApprox"]
+
     print(f"📊 Sampled transactions: effective={ep['count']}  tip={tp['count']}")
     print(f"🕒 Average Block Time: {result['avgBlockTimeSec']} seconds")
-    print(f"🎯 Gas target ratio: {(block.gasUsed / (block.gasLimit / 2)) * 100:.1f}% of target")
     print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
-    print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
-     print(
+    print(
+        f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  "
+        f"max={ep['max']}  (n={ep['count']})"
+    )
+    print(
         f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  "
         f"(n={tp['count']}, zero={tp.get('countZero', 0)})"
     )
     print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
-    # ✅ Add timestamp footer
     print(f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
+
 
 if __name__ == "__main__":
     main()
