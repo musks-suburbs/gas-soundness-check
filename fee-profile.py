@@ -153,16 +153,17 @@ def parse_args() -> argparse.Namespace:
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     ap.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
-       ap.add_argument("-b", "--blocks", type=int, default=DEFAULT_BLOCKS, help="How many recent blocks to scan")
+    ap.add_argument("-b", "--blocks", type=int, default=DEFAULT_BLOCKS, help="How many recent blocks to scan")
     ap.add_argument("-s", "--step", type=int, default=DEFAULT_STEP, help="Sample every Nth block for speed")
     ap.add_argument("--json", action="store_true", help="Output JSON only")
-        ap.add_argument(
+    ap.add_argument(
         "--head",
         type=int,
         help="Use this block number as the head instead of the latest",
     )
 
     return ap.parse_args()
+
 
 def main() -> None:
     args = parse_args()
