@@ -289,11 +289,10 @@ def main():
 hashes = read_hashes(args.file, args.limit)
 print(f"🧮 Total transactions read: {len(hashes)}")
 
-    print(f"🧮 Processing {len(hashes)} transaction hashes…")
+      print(f"🧮 Processing {len(hashes)} transaction hashes…")
     if not hashes:
         print("❌ No valid transaction hashes provided.", file=sys.stderr)
         sys.exit(1)
-print(f"🔗 Using RPC endpoint: {args.rpc}")
 
     w3 = connect(args.rpc)
     
