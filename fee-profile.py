@@ -37,6 +37,7 @@ def connect(rpc: str) -> Web3:
 
 
 def pct(values: List[float], q: float) -> float:
+    """Return the q-th percentile (0..1) of a list of floats."""
     if not values:
         return 0.0
     q = max(0.0, min(1.0, q))
