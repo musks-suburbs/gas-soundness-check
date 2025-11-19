@@ -124,14 +124,20 @@ def safe_call(fn, *args, retries=2, delay=0.8, **kwargs):
 
 def tx_type_label(tt) -> str:
     """
-    Map a transaction type (int or bytes or None) to a short human-readable label.
+    Map a transaction type (int, bytes, or None) to a short human-readable label.
     """
     mapping = {0: "Legacy", 1: "AccessList", 2: "EIP-1559"}
-      if isinstance(tt, int):
+    if isinstance(tt, int):
         return mapping.get(tt, f"Unknown({tt})")
+    if isinstance(tt, bytes):
+        try:
+            v = int.from_bytes(tt, "big")
+            return mapping.get(v, f"Unknown({v})")
+        except Exception:
+            return "Legacy"
     if tt is None:
         return "Legacy"
-    return mapping.get(0, "Legacy")
+    return "Legacy"
 
 
 def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_block: int) -> Dict[str, Any]:
