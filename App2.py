@@ -158,28 +158,33 @@ def colorize(text, color):
     reset = colors["reset"] if prefix else ""
     return f"{prefix}{text}{reset}"
 
-def main():
-    import platform
+def main() -> None:
     print(f"📦 Running on Python {platform.python_version()} on {platform.system()}")
     args = parse_args()
+
     if not args.rpc.startswith(("http://", "https://")):
-        print("⚠️ RPC URL does not start with http:// or https://; continuing anyway.")
-from datetime import datetime
-print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
+        print("⚠️ RPC URL does not start with http:// or https://; continuing anyway.", file=sys.stderr)
+
+    print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
+
     if not is_tx_hash(args.tx_hash):
-        print("❌ Invalid transaction hash format.")
+        print("❌ Invalid transaction hash format (expected 0x + 64 hex chars).", file=sys.stderr)
         sys.exit(1)
 
     t0 = time.time()
     w3 = connect(args.rpc)
+
     try:
         cid = w3.eth.chain_id
         print(f"🌐 Detected network: {network_name(cid)} (chainId {cid})")
     except Exception:
-        print("🌐 Network detection failed.")
+        print("🌐 Network detection failed.", file=sys.stderr)
+
     start_time = time.time()
     print(f"⚡ RPC latency: {time.time() - start_time:.3f}s")
+
     summary = fetch_tx_summary(w3, args.tx_hash)
+
     if args.minimal:
         status_text = "success" if summary["status"] == 1 else "failed"
         print(f"📦 Status: {status_text}")
@@ -188,14 +193,12 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
         return
 
     if args.json:
-        import json
         # Compact JSON but stable keys
         print(json.dumps(summary, separators=(",", ":"), sort_keys=True))
         return
 
-       print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
-    if summary["chainId"] == 1:
-        print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
+    print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
+
     if summary["chainId"] == 1:
         print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
     elif summary["chainId"] == 137:
@@ -203,19 +206,25 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
     elif summary["chainId"] == 42161:
         print(f"🔍 Arbiscan: https://arbiscan.io/tx/{summary['txHash']}")
 
-
     print(f"👤 From: {summary['from']}")
-    to_addr = summary['to'] or "(contract creation)"
+    to_addr = summary["to"] or "(contract creation)"
     print(f"🎯 To: {to_addr}")
 
-      status_text = "✅ Success" if summary["status"] == 1 else "❌ Failed"
+    status_text = "✅ Success" if summary["status"] == 1 else "❌ Failed"
     color = "green" if summary["status"] == 1 else "red"
     print(f"📦 Status: {colorize(status_text, color)}")
-    print(f"🔢 Block: {summary['blockNumber']}  🕒 {fmt_utc(summary['timestamp'])} UTC  ✅ Confirmations: {summary['confirmations']}")
+
+    print(
+        f"🔢 Block: {summary['blockNumber']}  "
+        f"🕒 {fmt_utc(summary['timestamp'])} UTC  "
+        f"✅ Confirmations: {summary['confirmations']}"
+    )
     if summary["confirmations"] < 3:
         print("⚠️ Low confirmations: consider waiting for more blocks before relying on this tx.")
+
     print(f"⛏️  Miner/Validator: {summary['miner']}")
-       print(f"⛽ Gas Used: {summary['gasUsed']}")
+    print(f"⛽ Gas Used: {summary['gasUsed']}")
+
     gas_eff = summary.get("gasEfficiency")
     if gas_eff is not None:
         print(f"📈 Gas Efficiency: {gas_eff:.2f}% of gas limit used")
@@ -226,19 +235,17 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
         f"⛽ Gas Price: {summary['gasPriceGwei']:.2f} Gwei  "
         f"(BaseFee@tx: {summary['baseFeeAtTxGwei']:.2f} Gwei)"
     )
-
-
     print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
-      if args.warn_fee_eth > 0 and summary["totalFeeEth"] > args.warn_fee_eth:
-        print(f"⚠️  High Fee Warning: {summary['totalFeeEth']:.4f} ETH exceeds threshold {args.warn_fee_eth:.4f} ETH.")
 
+    if args.warn_fee_eth > 0 and summary["totalFeeEth"] > args.warn_fee_eth:
+        print(
+            f"⚠️  High Fee Warning: {summary['totalFeeEth']:.4f} ETH exceeds "
+            f"threshold {args.warn_fee_eth:.4f} ETH."
+        )
 
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
-    import time
-print(f"🕒 Total runtime so far: {time.process_time():.2f} seconds (CPU time)")
-
-import datetime
-print(f"🏁 Finished at {datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
+    print(f"🕒 Total runtime so far: {time.process_time():.2f} seconds (CPU time)")
+    print(f"🏁 Finished at {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
 
 if __name__ == "__main__":
     main()
