@@ -194,6 +194,7 @@ def main() -> None:
     bf = result["baseFeeGwei"]
     ep = result["effectivePriceGwei"]
     tp = result["tipGweiApprox"]
+    print(f"📊 Sampled transactions: effective={ep['count']}  tip={tp['count']}")
     print(f"🕒 Average Block Time: {result['avgBlockTimeSec']} seconds")
     print(f"🎯 Gas target ratio: {(block.gasUsed / (block.gasLimit / 2)) * 100:.1f}% of target")
     print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
