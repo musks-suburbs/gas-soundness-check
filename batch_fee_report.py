@@ -249,9 +249,9 @@ def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
         w.writerows(rows)
 
 def parse_args() -> argparse.Namespace:
-        ap.add_argument("--skip-failed", action="store_true", help="Exclude failed or missing transactions from output")
     ap = argparse.ArgumentParser(
-        description="Batch analyze transaction fees and efficiency; outputs CSV or JSON."
+        description="Batch analyze transaction fees and efficiency; outputs CSV or JSON.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     ap.add_argument("-r", "--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
     ap.add_argument("-f", "--file", help="File with one tx hash per line (default: stdin)")
@@ -264,11 +264,27 @@ def parse_args() -> argparse.Namespace:
         help="Print JSON instead of CSV",
     )
     ap.add_argument(
+        "--skip-failed",
+        action="store_true",
+        help="Exclude failed or pending/missing transactions from output",
+    )
+    ap.add_argument(
+        "--sleep",
+        type=float,
+        default=0.0,
+        help="Sleep N seconds between transactions",
+    )
+    ap.add_argument(
+        "--log",
+        help="Optional path to log all stdout/stderr",
+    )
+    ap.add_argument(
         "--version",
         action="store_true",
         help="Print script version and exit",
     )
     return ap.parse_args()
+
 # ✅ Optional logging setup
     if args.log:
         sys.stdout = open(args.log, "w")
