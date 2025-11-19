@@ -147,7 +147,8 @@ def parse_args() -> argparse.Namespace:
         help="Print only status and fee (no extra details)",
     )
     return p.parse_args()
-def colorize(text, color):
+def colorize(text: str, color: str) -> str:
+    """Wrap text in ANSI color codes (best-effort; falls back to plain)."""
     colors = {
         "red": "\033[31m",
         "green": "\033[32m",
@@ -157,6 +158,7 @@ def colorize(text, color):
     prefix = colors.get(color, "")
     reset = colors["reset"] if prefix else ""
     return f"{prefix}{text}{reset}"
+
 
 def main():
     import platform
