@@ -192,8 +192,6 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
         # Compact JSON but stable keys
         print(json.dumps(summary, separators=(",", ":"), sort_keys=True))
         return
-start_time = time.time()
-print(f"⏱️  Elapsed: {time.time() - start_time:.2f}s")
 
        print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
     if summary["chainId"] == 1:
