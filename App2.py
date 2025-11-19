@@ -2,8 +2,13 @@
 import os
 import sys
 import time
+import json
 import argparse
 from typing import Any, Dict
+
+from datetime import datetime
+import platform
+
 from web3 import Web3
 
 # ---------- Defaults (override via --rpc or environment) ----------
@@ -234,11 +239,6 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
 
 
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
-    import time
-print(f"🕒 Total runtime so far: {time.process_time():.2f} seconds (CPU time)")
-
-import datetime
-print(f"🏁 Finished at {datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
 
 if __name__ == "__main__":
     main()
