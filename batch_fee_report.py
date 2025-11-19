@@ -276,6 +276,17 @@ def parse_args() -> argparse.Namespace:
         print(f"🗒️  Logging enabled — all output will be saved to {args.log}")
 def main():
     args = parse_args()
+    if args.version:
+        print(f"batch_fee_report version {__version__}")
+        return
+
+    # Optional logging redirection
+    if args.log:
+        log_f = open(args.log, "a", encoding="utf-8")
+        sys.stdout = log_f
+        sys.stderr = log_f
+        print(f"🗒️  Logging enabled — all output will be saved to {args.log}")
+
         if args.version:
         print(f"batch_fee_report version {__version__}")
         return
