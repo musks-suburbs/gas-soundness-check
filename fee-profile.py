@@ -181,6 +181,8 @@ def main() -> None:
 
       w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step, args.head)
+    if result["sampledBlocks"] == 0:
+        print("⚠️  No blocks were sampled. Check --blocks/--step and head range.", file=sys.stderr)
 
       if args.json:
         payload = {
