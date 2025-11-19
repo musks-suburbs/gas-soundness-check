@@ -205,7 +205,7 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
 
 
     print(f"👤 From: {summary['from']}")
-     to_addr = summary['to'] or "(contract creation)"
+    to_addr = summary['to'] or "(contract creation)"
     print(f"🎯 To: {to_addr}")
 
       status_text = "✅ Success" if summary["status"] == 1 else "❌ Failed"
