@@ -58,9 +58,10 @@ def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float
       - Legacy:   effective = gasPrice
                   tip ~= max(0, gasPrice - baseFee)
     """
-    eff = []
-    tip = []
+    eff: List[float] = []
+    tip: List[float] = []
     bf = base_fee_wei or 0
+
     for tx in block.transactions:
         # EIP-1559 type can be 2, AccessList 1, Legacy 0/None
         ttype = tx.get("type", 0) if isinstance(tx, dict) else getattr(tx, "type", 0)
@@ -75,6 +76,7 @@ def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float
             eff.append(float(Web3.from_wei(gp, "gwei")))
             tip.append(float(Web3.from_wei(max(0, gp - bf), "gwei")))
     return eff, tip
+
 
 def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) -> Dict[str, object]:
     head = int(head_override) if head_override is not None else int(w3.eth.block_number)
