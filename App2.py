@@ -148,7 +148,15 @@ def parse_args() -> argparse.Namespace:
     )
     return p.parse_args()
 def colorize(text, color):
-    return text  # простой безопасный вариант без цветов
+    colors = {
+        "red": "\033[31m",
+        "green": "\033[32m",
+        "yellow": "\033[33m",
+        "reset": "\033[0m",
+    }
+    prefix = colors.get(color, "")
+    reset = colors["reset"] if prefix else ""
+    return f"{prefix}{text}{reset}"
 
 def main():
     import platform
