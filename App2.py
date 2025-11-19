@@ -8,7 +8,7 @@ from web3 import Web3
 
 # ---------- Defaults (override via --rpc or environment) ----------
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
-
+DEFAULT_WARN_FEE = float(os.getenv("TX_WARN_FEE_ETH", "0.05"))
 NETWORKS = {
     1: "Ethereum Mainnet",
     11155111: "Sepolia Testnet",
@@ -140,7 +140,7 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("tx_hash", help="Transaction hash (0x + 64 hex chars)")
     p.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
     p.add_argument("--json", action="store_true", help="Print JSON instead of human-readable output")
-    p.add_argument("--warn-fee-eth", type=float, default=0.05, help="Warn if fee exceeds this ETH (default 0.05)")
+    p.add_argument("--warn-fee-eth", type=float, default=DEFAULT_WARN_FEE,, help="Warn if fee exceeds this ETH (default 0.05)")
     p.add_argument(
         "--minimal",
         action="store_true",
