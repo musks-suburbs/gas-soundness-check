@@ -314,6 +314,8 @@ print(f"🧮 Total transactions read: {len(hashes)}")
         if i % 10 == 0:
             print(f"🔍 Processed {i}/{len(hashes)}...", file=sys.stderr)
     # sort rows by blockNumber if available
+        if args.sleep > 0:
+            time.sleep(args.sleep)
     rows.sort(key=lambda r: r.get("blockNumber", 0))
 
     if args.json:
