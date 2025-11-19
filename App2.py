@@ -110,6 +110,11 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     
       # Get miner/validator address
     miner_address = getattr(block, "miner", "N/A")
+    # Summary fields:
+    #   chainId, network, txHash, from, to, status,
+    #   blockNumber, timestamp, confirmations, miner,
+    #   gasUsed, gasEfficiency, gasPriceGwei,
+    #   baseFeeAtTxGwei, totalFeeEth
 
     
     return {
