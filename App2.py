@@ -16,7 +16,7 @@ NETWORKS = {
     137: "Polygon",
     42161: "Arbitrum One",
 }
-
+__version__ = "0.1.0"
 # ---------- Small helpers ----------
 def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
@@ -138,6 +138,13 @@ def parse_args() -> argparse.Namespace:
         description="Optimized transaction gas & commitment facts (minimal RPC calls)."
     )
     p.add_argument("tx_hash", help="Transaction hash (0x + 64 hex chars)")
+    p.add_argument(
+        "--version",
+        action="store_true",
+        help="Print version and exit",
+    )
+    return p.parse_args()
+
     p.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
     p.add_argument("--json", action="store_true", help="Print JSON instead of human-readable output")
     p.add_argument("--warn-fee-eth", type=float, default=0.05, help="Warn if fee exceeds this ETH (default 0.05)")
@@ -187,6 +194,9 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
         print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
         return
 
+    if args.version:
+        print(f"tx-soundness-helper version {__version__}")
+        return
     if args.json:
         import json
         # Compact JSON but stable keys
