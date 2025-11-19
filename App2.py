@@ -8,6 +8,7 @@ from web3 import Web3
 
 # ---------- Defaults (override via --rpc or environment) ----------
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
+DEFAULT_TIMEOUT = int(os.getenv("RPC_TIMEOUT", "20"))
 
 NETWORKS = {
     1: "Ethereum Mainnet",
@@ -25,7 +26,7 @@ def is_tx_hash(s: str) -> bool:
     return isinstance(s, str) and s.startswith("0x") and len(s) == 66
 
 def connect(rpc: str) -> Web3:
-    w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 20}))
+       w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": DEFAULT_TIMEOUT}))
       if not w3.is_connected():
         print(f"❌ Failed to connect to RPC: {rpc}")
         sys.exit(1)
