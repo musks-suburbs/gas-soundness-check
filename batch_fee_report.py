@@ -103,9 +103,12 @@ def read_hashes(source_file: str | None, limit: int | None) -> List[str]:
     return hashes
 
 
-def safe_call(fn, *args, retries=2, delay=0.8, **kwargs):
+def safe_call(fn, *args, retries: int = 2, delay: float = 0.8, **kwargs):
     """
     Call an RPC function with simple retry logic.
+
+    Retries up to `retries` times, sleeping `delay` seconds between attempts.
+    Raises the last exception if all retries fail.
     """
     for attempt in range(1, retries + 1):
         try:
@@ -114,12 +117,11 @@ def safe_call(fn, *args, retries=2, delay=0.8, **kwargs):
             if attempt == retries:
                 raise
             remaining = retries - attempt
-                   print(
-                f"⚠️  RPC call failed on attempt {attempt}/{retries} ({e}); retrying in {delay}s "
-                f"({remaining} retry{'s' if remaining != 1 else ''} left)...",
+            print(
+                f"⚠️  RPC call failed on attempt {attempt}/{retries} ({e}); "
+                f"retrying in {delay}s ({remaining} retry{'s' if remaining != 1 else ''} left)...",
                 file=sys.stderr,
             )
-
             time.sleep(delay)
 
 def tx_type_label(tt) -> str:
