@@ -263,6 +263,11 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Print JSON instead of CSV",
     )
+    ap.add_argument(
+        "--version",
+        action="store_true",
+        help="Print script version and exit",
+    )
     return ap.parse_args()
 # ✅ Optional logging setup
     if args.log:
@@ -271,6 +276,9 @@ def parse_args() -> argparse.Namespace:
         print(f"🗒️  Logging enabled — all output will be saved to {args.log}")
 def main():
     args = parse_args()
+        if args.version:
+        print(f"batch_fee_report version {__version__}")
+        return
         ap.add_argument(
         "--sleep",
         type=float,
