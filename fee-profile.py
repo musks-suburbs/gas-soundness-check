@@ -3,6 +3,11 @@
 Samples recent blocks and computes percentiles for base fee, effective gas price,
 and priority tip (approx.) in Gwei.
 """
+
+# Example:
+#   python fee_profile.py --rpc https://mainnet.infura.io/v3/YOUR_KEY \
+#       --blocks 300 --step 3 --json
+
 import os
 import sys
 import time
