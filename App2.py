@@ -197,6 +197,8 @@ print(f"⏱️  Elapsed: {time.time() - start_time:.2f}s")
    color = "green" if summary["status"] == 1 else "red"
     print(f"📦 Status: {colorize(status_text, color)}")
     print(f"🔢 Block: {summary['blockNumber']}  🕒 {fmt_utc(summary['timestamp'])} UTC  ✅ Confirmations: {summary['confirmations']}")
+    if summary["confirmations"] < 3:
+        print("⚠️ Low confirmations: consider waiting for more blocks before relying on this tx.")
     print(f"⛏️  Miner/Validator: {summary['miner']}")
     print(f"⛽ Gas Used: {summary['gasUsed']}")
     gas_eff = summary.get("gasEfficiency")
