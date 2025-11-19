@@ -155,6 +155,7 @@ def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_blo
     if block is None:
         block = safe_call(w3.eth.get_block, block_num)
         block_cache[block_num] = block
+    miner = getattr(block, "miner", block.get("miner", None))
 
     ts = int(block.timestamp)
     base_fee_wei = int(block.get("baseFeePerGas", 0) or 0)
@@ -193,7 +194,8 @@ def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_blo
                "timestamp": ts,
         "utc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(ts)),
         "localTime": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts)),
-        "confirmations": confirmations,
+         "confirmations": confirmations,
+        "miner": miner,
               "from": tx.get("from"),
         "to": tx.get("to"),
 
