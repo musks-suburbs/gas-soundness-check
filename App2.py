@@ -22,7 +22,14 @@ def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
 def is_tx_hash(s: str) -> bool:
-    return isinstance(s, str) and s.startswith("0x") and len(s) == 66
+    if not (isinstance(s, str) and s.startswith("0x") and len(s) == 66):
+        return False
+    try:
+        int(s[2:], 16)
+        return True
+    except ValueError:
+        return False
+
 
 def connect(rpc: str) -> Web3:
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 20}))
