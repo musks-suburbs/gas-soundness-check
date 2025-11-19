@@ -216,14 +216,16 @@ def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
         print("⚠️  No rows to write.", file=sys.stderr)
         return
     # consistent column order
-    cols = [
+       cols = [
         "txHash",
         "status",
+        "statusText",
         "txType",
         "blockNumber",
         "utc",
         "localTime",
         "confirmations",
+        "miner",
         "from",
         "to",
         "valueEth",
@@ -236,6 +238,7 @@ def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
         "totalFeeEth",
         "ageMinutes",
     ]
+
 
     if out_path:
         with open(out_path, "w", newline="", encoding="utf-8") as f:
