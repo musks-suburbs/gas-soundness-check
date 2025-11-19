@@ -111,6 +111,7 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
         block_time_avg = time_diff / (head - start) if head > start else 0
     else:
         block_time_avg = 0
+    zero_tip_count = sum(1 for x in tips if x == 0.0)
 
     return {
         
@@ -136,6 +137,8 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
             "count": len(eff_prices),
         },
         "tipGweiApprox": {
+                        "countZero": zero_tip_count,
+
             "p50": round(median(tips), 3) if tips else 0.0,
             "p95": round(pct(tips, 0.95), 3) if tips else 0.0,
             "min": round(min(tips), 3) if tips else 0.0,
@@ -196,7 +199,10 @@ def main() -> None:
     print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
     print(f"⛽ baseFee {Web3.from_wei(base_fee, 'gwei'):.2f} Gwei")
     print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
-    print(f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  (n={tp['count']})")
+     print(
+        f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  "
+        f"(n={tp['count']}, zero={tp.get('countZero', 0)})"
+    )
     print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
     # ✅ Add timestamp footer
     print(f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
