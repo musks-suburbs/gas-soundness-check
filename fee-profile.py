@@ -107,8 +107,9 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
         print(f"🧮 Base fee at block {block.number}: {Web3.from_wei(block.baseFeePerGas, 'gwei'):.2f} Gwei")
         last_block = w3.eth.get_block(start)
         import datetime; print(f"🕒 Latest block timestamp: {datetime.datetime.utcfromtimestamp(block.timestamp)} UTC")
-        time_diff = first_block.timestamp - last_block.timestamp
+                time_diff = first_block.timestamp - last_block.timestamp
         block_time_avg = time_diff / (head - start) if head > start else 0
+        block_time_avg = max(0, block_time_avg)
     else:
         block_time_avg = 0
     zero_tip_count = sum(1 for x in tips if x == 0.0)
