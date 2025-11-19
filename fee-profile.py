@@ -26,16 +26,18 @@ def network_name(cid: int) -> str:
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
 def connect(rpc: str) -> Web3:
+    """Connect to an RPC endpoint and print a short banner."""
     start = time.time()
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 30}))
     if not w3.is_connected():
         print(f"❌ Failed to connect to RPC endpoint: {rpc}", file=sys.stderr)
         sys.exit(1)
     latest = w3.eth.block_number
-    print(f"🌐 chainId={w3.eth.chain_id} tip={latest}")
     latency = time.time() - start
+    print(f"🌐 chainId={w3.eth.chain_id} tip={latest}", file=sys.stderr)
     print(f"⚡ RPC connected in {latency:.2f}s", file=sys.stderr)
     return w3
+
 
 
 
