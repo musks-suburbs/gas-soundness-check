@@ -5,7 +5,10 @@ import time
 import argparse
 from typing import Any, Dict
 from web3 import Web3
-
+# Example usage:
+#   python app.py 0xTXHASH \
+#       --rpc https://mainnet.infura.io/v3/YOUR_KEY \
+#       --minimal
 # ---------- Defaults (override via --rpc or environment) ----------
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 
