@@ -274,64 +274,76 @@ def parse_args() -> argparse.Namespace:
         sys.stdout = open(args.log, "w")
         sys.stderr = sys.stdout
         print(f"🗒️  Logging enabled — all output will be saved to {args.log}")
-def main():
+def main() -> None:
     args = parse_args()
-        if args.version:
+
+    if args.version:
         print(f"batch_fee_report version {__version__}")
         return
-        ap.add_argument(
-        "--sleep",
-        type=float,
-        default=0.0,
-        help="Sleep N seconds between transactions (default: 0)",
-    )
-      print(f"🔗 Using RPC endpoint: {args.rpc}")
-hashes = read_hashes(args.file, args.limit)
-print(f"🧮 Total transactions read: {len(hashes)}")
 
-      print(f"🧮 Processing {len(hashes)} transaction hashes…")
+    # Optional logging redirection
+    if args.log:
+        log_f = open(args.log, "a", encoding="utf-8")
+        sys.stdout = log_f
+        sys.stderr = log_f
+        print(f"🗒️  Logging enabled — all output will be saved to {args.log}")
+
+    print(f"🔗 Using RPC endpoint: {args.rpc}", file=sys.stderr)
+
+    hashes = read_hashes(args.file, args.limit)
+    print(f"🧮 Total transactions read: {len(hashes)}", file=sys.stderr)
+
     if not hashes:
         print("❌ No valid transaction hashes provided.", file=sys.stderr)
         sys.exit(1)
 
     w3 = connect(args.rpc)
-    
     latest = int(w3.eth.block_number)
     cache: Dict[int, Any] = {}
     rows: List[Dict[str, Any]] = []
 
     t0 = time.time()
     for i, h in enumerate(hashes, 1):
-     try:
+        try:
             row = summarize_tx(w3, h, cache, latest)
-            # ✅ Skip failed or pending if user enabled --skip-failed
-            if args.skip_failed and row.get("statusText") == "pending_or_not_found":
-                print(f"⏭️  Skipped {h} (pending or missing)", file=sys.stderr)
+            if args.skip_failed and row.get("statusText") != "success":
+                print(f"⏭️  Skipped {h} (status={row.get('statusText')})", file=sys.stderr)
                 continue
             rows.append(row)
         except Exception as e:
             print(f"⚠️  Failed to process {h}: {e}", file=sys.stderr)
-        if i % 10 == 0:
-            print(f"🔍 Processed {i}/{len(hashes)}...", file=sys.stderr)
-    # sort rows by blockNumber if available
         if args.sleep > 0:
             time.sleep(args.sleep)
+        if i % 10 == 0:
+            print(f"🔍 Processed {i}/{len(hashes)}...", file=sys.stderr)
+
+    # sort rows by blockNumber if available
     rows.sort(key=lambda r: r.get("blockNumber", 0))
 
     if args.json:
         chain_id = int(w3.eth.chain_id)
-        print(json.dumps({
-            "network": network_name(chain_id),
-            "chainId": chain_id,
-            "count": len(rows),
-            "generatedAtUtc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
-            "rows": rows
-        }, indent=2, sort_keys=True))
+        print(
+            json.dumps(
+                {
+                    "network": network_name(chain_id),
+                    "chainId": chain_id,
+                    "count": len(rows),
+                    "generatedAtUtc": time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()),
+                    "rows": rows,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
     else:
         to_csv(rows, args.out)
-        print(f"📅 Report generated at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
-print(f"⏱️ Batch analysis completed in {round(time.time() - t0, 2)} seconds.")
-    print(f"⏱️  Elapsed: {time.time() - t0:.2f}s", file=sys.stderr)
+        print(
+            f"📅 Report generated at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}",
+            file=sys.stderr,
+        )
+
+    elapsed = time.time() - t0
+    print(f"⏱️ Batch analysis completed in {elapsed:.2f} seconds.", file=sys.stderr)
 
 if __name__ == "__main__":
     main()
