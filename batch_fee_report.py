@@ -21,6 +21,7 @@ if "your_api_key" in DEFAULT_RPC:
         "Set RPC_URL to a real endpoint for this script to work.",
         file=sys.stderr,
     )
+SAFE_CALL_VERBOSE = os.getenv("SAFE_CALL_VERBOSE", "1") != "0"
 
 NETWORKS = {
     1: "Ethereum Mainnet",
@@ -110,17 +111,18 @@ def safe_call(fn, *args, retries=2, delay=0.8, **kwargs):
     for attempt in range(1, retries + 1):
         try:
             return fn(*args, **kwargs)
-        except Exception as e:
+         except Exception as e:
             if attempt == retries:
                 raise
             remaining = retries - attempt
-                   print(
-                f"⚠️  RPC call failed on attempt {attempt}/{retries} ({e}); retrying in {delay}s "
-                f"({remaining} retry{'s' if remaining != 1 else ''} left)...",
-                file=sys.stderr,
-            )
-
+            if SAFE_CALL_VERBOSE:
+                print(
+                    f"⚠️  RPC call failed on attempt {attempt}/{retries} ({e}); "
+                    f"retrying in {delay}s ({remaining} retry{'s' if remaining != 1 else ''} left)...",
+                    file=sys.stderr,
+                )
             time.sleep(delay)
+
 
 def tx_type_label(tt) -> str:
     """
