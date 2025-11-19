@@ -185,9 +185,16 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
 start_time = time.time()
 print(f"⏱️  Elapsed: {time.time() - start_time:.2f}s")
 
-    print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
-      if summary["chainId"] == 1:
+       print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
+    if summary["chainId"] == 1:
         print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
+    if summary["chainId"] == 1:
+        print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
+    elif summary["chainId"] == 137:
+        print(f"🔍 Polygonscan: https://polygonscan.com/tx/{summary['txHash']}")
+    elif summary["chainId"] == 42161:
+        print(f"🔍 Arbiscan: https://arbiscan.io/tx/{summary['txHash']}")
+
 
     print(f"👤 From: {summary['from']}")
      to_addr = summary['to'] or "(contract creation)"
