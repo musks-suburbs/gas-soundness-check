@@ -153,7 +153,10 @@ def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_blo
     if block is None:
         block = safe_call(w3.eth.get_block, block_num)
         block_cache[block_num] = block
-    miner = getattr(block, "miner", block.get("miner", None))
+       miner = getattr(block, "miner", None)
+    if miner is None and isinstance(block, dict):
+        miner = block.get("miner")
+
 
     ts = int(block.timestamp)
     base_fee_wei = int(block.get("baseFeePerGas", 0) or 0)
