@@ -108,8 +108,9 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
 
     total_fee_wei = int(rcpt.gasUsed) * int(gas_price_wei or 0)
     
-   # ✅ Get miner/validator address
-    miner_address = block.get("miner", "N/A")
+      # Get miner/validator address
+    miner_address = getattr(block, "miner", "N/A")
+
     
     return {
         "miner": miner_address,
