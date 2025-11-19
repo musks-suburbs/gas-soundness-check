@@ -141,6 +141,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
     p.add_argument("--json", action="store_true", help="Print JSON instead of human-readable output")
     p.add_argument("--warn-fee-eth", type=float, default=0.05, help="Warn if fee exceeds this ETH (default 0.05)")
+    p.add_argument(
+        "--minimal",
+        action="store_true",
+        help="Print only status and fee (no extra details)",
+    )
     return p.parse_args()
 def colorize(text, color):
     return text  # простой безопасный вариант без цветов
@@ -165,6 +170,12 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
     start_time = time.time()
     print(f"⚡ RPC latency: {time.time() - start_time:.3f}s")
     summary = fetch_tx_summary(w3, args.tx_hash)
+    if args.minimal:
+        status_text = "success" if summary["status"] == 1 else "failed"
+        print(f"📦 Status: {status_text}")
+        print(f"💰 Total Fee: {summary['totalFeeEth']:.6f} ETH")
+        print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
+        return
 
     if args.json:
         import json
