@@ -318,7 +318,12 @@ print(f"🧮 Total transactions read: {len(hashes)}")
         sys.exit(1)
 
     w3 = connect(args.rpc)
-    
+        try:
+        chain_id = int(w3.eth.chain_id)
+        print(f"🌐 Network: {network_name(chain_id)} (chainId {chain_id})", file=sys.stderr)
+    except Exception as e:
+        print(f"⚠️  Failed to detect chainId: {e}", file=sys.stderr)
+
     latest = int(w3.eth.block_number)
     cache: Dict[int, Any] = {}
     rows: List[Dict[str, Any]] = []
