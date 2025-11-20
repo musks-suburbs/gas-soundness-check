@@ -21,6 +21,11 @@ NETWORKS = {
     137: "Polygon",
     42161: "Arbitrum One",
 }
+EXPLORERS = {
+    1: "https://etherscan.io",
+    137: "https://polygonscan.com",
+    42161: "https://arbiscan.io",
+}
 
 # ---------- Small helpers ----------
 def network_name(cid: int) -> str:
@@ -203,14 +208,10 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
         return
 
        print(f"🌐 Connected to {summary['network']} (chainId {summary['chainId']})")
-    if summary["chainId"] == 1:
-        print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
-    if summary["chainId"] == 1:
-        print(f"🔍 Etherscan: https://etherscan.io/tx/{summary['txHash']}")
-    elif summary["chainId"] == 137:
-        print(f"🔍 Polygonscan: https://polygonscan.com/tx/{summary['txHash']}")
-    elif summary["chainId"] == 42161:
-        print(f"🔍 Arbiscan: https://arbiscan.io/tx/{summary['txHash']}")
+    explorer_base = EXPLORERS.get(summary["chainId"])
+    if explorer_base:
+        print(f"🔍 Explorer: {explorer_base}/tx/{summary['txHash']}")
+
 
 
     print(f"👤 From: {summary['from']}")
