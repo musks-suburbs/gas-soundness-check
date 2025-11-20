@@ -81,51 +81,50 @@ def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float
             tip.append(float(Web3.from_wei(max(0, gp - bf), "gwei")))
     return eff, tip
 
-def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) -> Dict[str, object]:
+def analyze(
+    w3: Web3,
+    blocks: int,
+    step: int,
+    head_override: Optional[int] = None,
+) -> Dict[str, object]:
     head = int(head_override) if head_override is not None else int(w3.eth.block_number)
     start = max(0, head - blocks + 1)
     t0 = time.time()
-    basefees, eff_prices, tips = [], [], []
-    
 
-    print(f"🔍 Scanning the last {blocks} blocks (every {step}th block)...")
+    basefees: List[float] = []
+    eff_prices: List[float] = []
+    tips: List[float] = []
+
+    print(f"🔍 Scanning the last {blocks} blocks (every {step}th block)...", file=sys.stderr)
 
     # Iterate backwards in steps for speed
     for n in range(head, start - 1, -step):
-        if block.number == 0: print("⛳ genesis block; no previous"); sys.exit(0)
         blk = w3.eth.get_block(n, full_transactions=True)
-                sampled_blocks += 1
-               bf = int(getattr(blk, "baseFeePerGas", blk.get("baseFeePerGas", 0)))
+        bf = int(getattr(blk, "baseFeePerGas", getattr(blk, "base_fee_per_gas", 0) or 0))
 
         basefees.append(float(Web3.from_wei(bf, "gwei")))
         eff_gwei, tip_gwei = sample_block_fees(blk, bf)
         eff_prices.extend(eff_gwei)
         tips.extend(tip_gwei)
-        # ✅ Show progress every 20 sampled blocks
+
+        # Show progress every 20 sampled blocks
         if len(basefees) % 20 == 0:
-            print(f"🔍 Processed {len(basefees)} blocks so far... (latest={n})")
-
-        if n % (step * 10) == 0:
-            print(f"   ⏳ At block {n}...")
-
+            print(f"🔍 Sampled {len(basefees)} blocks so far (latest={n})", file=sys.stderr)
 
     elapsed = time.time() - t0
 
-    # ✅ Estimate average block time
-    if len(basefees) >= 2:
+    # Estimate average block time
+    if len(basefees) >= 2 and head > start:
         first_block = w3.eth.get_block(head)
-        print(f"🧮 Base fee at block {block.number}: {Web3.from_wei(block.baseFeePerGas, 'gwei'):.2f} Gwei")
         last_block = w3.eth.get_block(start)
-        import datetime; print(f"🕒 Latest block timestamp: {datetime.datetime.utcfromtimestamp(block.timestamp)} UTC")
-                time_diff = first_block.timestamp - last_block.timestamp
-        block_time_avg = time_diff / (head - start) if head > start else 0
-        block_time_avg = max(0, block_time_avg)
+        time_diff = first_block.timestamp - last_block.timestamp
+        block_time_avg = max(0.0, time_diff / (head - start))
     else:
-        block_time_avg = 0
+        block_time_avg = 0.0
+
     zero_tip_count = sum(1 for x in tips if x == 0.0)
 
     return {
-        
         "chainId": int(w3.eth.chain_id),
         "network": network_name(int(w3.eth.chain_id)),
         "avgBlockTimeSec": round(block_time_avg, 2),
@@ -148,15 +147,15 @@ def analyze(w3: Web3, blocks: int, step: int, head_override: int | None = None) 
             "count": len(eff_prices),
         },
         "tipGweiApprox": {
-                        "countZero": zero_tip_count,
-
             "p50": round(median(tips), 3) if tips else 0.0,
             "p95": round(pct(tips, 0.95), 3) if tips else 0.0,
             "min": round(min(tips), 3) if tips else 0.0,
             "max": round(max(tips), 3) if tips else 0.0,
             "count": len(tips),
+            "countZero": zero_tip_count,
         },
     }
+
 
 def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(
