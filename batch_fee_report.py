@@ -1,9 +1,8 @@
 # batch_fee_report.py
-"""Batch fee and gas-efficiency reporter for Ethereum-style networks.
-
-Reads a list of transaction hashes (from a file or stdin), queries an RPC,
-and outputs a CSV or JSON summary of gas usage and fees.
-"""
+   """
+    Read transaction hashes from a file or stdin, filter invalid ones,
+    and respect the optional positive limit (<=0 means no limit).
+    """
 
 import os
 import sys
@@ -106,7 +105,7 @@ def read_hashes(source_file: str | None, limit: int | None) -> List[str]:
         else:
             invalid_count += 1
             print(f"⚠️  Skipping invalid hash: {h}", file=sys.stderr)
-        if limit and len(hashes) >= limit:
+               if limit and limit > 0 and len(hashes) >= limit:
             break
 
     if invalid_count:
