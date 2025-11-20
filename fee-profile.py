@@ -233,4 +233,6 @@ def main() -> None:
     print(f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
 
 if __name__ == "__main__":
+    # CLI entrypoint
     main()
+
