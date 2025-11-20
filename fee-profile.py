@@ -54,6 +54,7 @@ def pct(values: List[float], q: float) -> float:
     return sorted_vals[idx]
 
 
+
 def sample_block_fees(block, base_fee_wei: int) -> Tuple[List[float], List[float]]:
     """
     Returns (effective_prices_gwei, tip_gwei_approx) for txs in the block.
