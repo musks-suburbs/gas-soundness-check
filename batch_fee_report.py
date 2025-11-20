@@ -62,6 +62,9 @@ def connect(rpc: str) -> Web3:
 
 
 def is_tx_hash(s: str) -> bool:
+    """
+    Quick sanity check: must be 0x + 64 hex chars.
+    """
     if not isinstance(s, str):
         return False
     s = s.strip()
@@ -69,12 +72,12 @@ def is_tx_hash(s: str) -> bool:
         return False
     if not s.lower().startswith("0x"):
         return False
-    # basic hex check on the part after 0x
     try:
         int(s[2:], 16)
     except ValueError:
         return False
     return True
+
 
 
 def read_hashes(source_file: str | None, limit: int | None) -> List[str]:
