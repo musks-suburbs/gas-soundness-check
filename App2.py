@@ -127,18 +127,27 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
 # ---------- CLI ----------
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(
-        description="Optimized transaction gas & commitment facts (minimal RPC calls)."
+        description="Optimized transaction gas & commitment facts (minimal RPC calls).",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     p.add_argument("tx_hash", help="Transaction hash (0x + 64 hex chars)")
-    p.add_argument("--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
-    p.add_argument("--json", action="store_true", help="Print JSON instead of human-readable output")
-    p.add_argument("--warn-fee-eth", type=float, default=0.05, help="Warn if fee exceeds this ETH (default 0.05)")
+    p.add_argument("-r", "--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
+    p.add_argument("-j", "--json", action="store_true", help="Print JSON instead of human-readable output")
     p.add_argument(
+        "-w",
+        "--warn-fee-eth",
+        type=float,
+        default=0.05,
+        help="Warn if fee exceeds this ETH",
+    )
+    p.add_argument(
+        "-m",
         "--minimal",
         action="store_true",
         help="Print only status and fee (no extra details)",
     )
     return p.parse_args()
+
 def colorize(text, color):
     colors = {
         "red": "\033[31m",
