@@ -28,6 +28,7 @@ NETWORKS = {
 }
 
 def network_name(cid: int) -> str:
+    """Map a chain ID to a human-readable network name (or a fallback string)."""
     return NETWORKS.get(cid, f"Unknown (chain ID {cid})")
 
 def connect(rpc: str) -> Web3:
