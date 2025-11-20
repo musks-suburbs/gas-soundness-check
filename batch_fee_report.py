@@ -276,6 +276,12 @@ def parse_args() -> argparse.Namespace:
     ap = argparse.ArgumentParser(
         description="Batch analyze transaction fees and efficiency; outputs CSV or JSON."
     )
+    ap.add_argument(
+        "--min-confirmations",
+        type=int,
+        default=0,
+        help="Exclude transactions with fewer than this many confirmations",
+    )
     ap.add_argument("-r", "--rpc", default=DEFAULT_RPC, help="RPC URL (default from RPC_URL env)")
     ap.add_argument("-f", "--file", help="File with one tx hash per line (default: stdin)")
     ap.add_argument("-l", "--limit", type=int, help="Limit number of hashes read")
@@ -336,6 +342,13 @@ print(f"🧮 Total transactions read: {len(hashes)}")
             if args.skip_failed and row.get("statusText") == "pending_or_not_found":
                 print(f"⏭️  Skipped {h} (pending or missing)", file=sys.stderr)
                 continue
+                            if args.min_confirmations > 0 and row.get("confirmations", 0) < args.min_confirmations:
+                print(
+                    f"⏭️  Skipped {h} (<{args.min_confirmations} confirmations)",
+                    file=sys.stderr,
+                )
+                continue
+
             rows.append(row)
         except Exception as e:
             print(f"⚠️  Failed to process {h}: {e}", file=sys.stderr)
