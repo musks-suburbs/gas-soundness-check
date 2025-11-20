@@ -213,12 +213,18 @@ def main() -> None:
     print(f"🎯 Gas target ratio: {(block.gasUsed / (block.gasLimit / 2)) * 100:.1f}% of target")
     print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
     print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
-     print(
+        print(
         f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  "
         f"(n={tp['count']}, zero={tp.get('countZero', 0)})"
     )
+
+    # New: show share of zero-tip transactions
+    if tp["count"] > 0:
+        zero_tip_pct = tp.get("countZero", 0) / tp["count"] * 100.0
+        print(f"🎯 Zero-tip share: {zero_tip_pct:.1f}% of sampled txs")
+
     print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
-    # ✅ Add timestamp footer
+
     print(f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
 
 if __name__ == "__main__":
