@@ -40,7 +40,6 @@ def connect(rpc: str) -> Web3:
 def fmt_utc(ts: int) -> str:
     return time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime(ts))
 
-# ---------- Core (optimized: minimal RPC calls) ----------
 def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     """
     Fetch a minimal but rich summary of a transaction:
@@ -50,93 +49,80 @@ def fetch_tx_summary(w3: Web3, tx_hash: str) -> Dict[str, Any]:
     - miner/validator address
     - fee breakdown (gas price, total fee, base fee at block)
     """
-
     chain_id = w3.eth.chain_id
 
-       # (2) receipt
+    # 1) transaction
+    try:
+        tx = w3.eth.get_transaction(tx_hash)
+    except Exception as e:
+        print(f"❌ Failed to fetch transaction: {e}", file=sys.stderr)
+        sys.exit(2)
+
+    if tx is None:
+        print("❌ Transaction not found.", file=sys.stderr)
+        sys.exit(2)
+
+    if getattr(tx, "blockNumber", None) is None:
+        print("⏳ Transaction is pending (not yet included in a block).", file=sys.stderr)
+        sys.exit(0)
+
+    # 2) receipt
     try:
         rcpt = w3.eth.get_transaction_receipt(tx_hash)
     except Exception as e:
-        print(f"❌ Failed to fetch receipt: {e}")
+        print(f"❌ Failed to fetch receipt: {e}", file=sys.stderr)
         sys.exit(2)
 
-    # Check if tx is still pending
-    try:
-        tx = w3.eth.get_transaction(tx_hash)
-        if tx is not None and tx.blockNumber is None:
-            print("⏳ Transaction is pending (not yet included in a block).")
-            sys.exit(0)
-    except Exception:
-        pass
+    if rcpt is None or getattr(rcpt, "blockNumber", None) is None:
+        print("❌ Transaction receipt not available yet.", file=sys.stderr)
+        sys.exit(2)
 
-        
-        # ✅ New code: check if tx is pending
-      try:
-        tx = w3.eth.get_transaction(tx_hash)
-        gas_limit = tx.gas
-        gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
-
-
-         if rcpt is None or rcpt.blockNumber is None:
-        print("❌ Transaction not found or not yet included in a block.")
-        sys.exit(0)
-
-    # Calculate gas efficiency (used / limit)
-    try:
-        tx = w3.eth.get_transaction(tx_hash)
-        gas_limit = tx.gas
-        gas_efficiency = (rcpt.gasUsed / gas_limit) * 100 if gas_limit else None
-    except Exception:
-        gas_efficiency = None
-
-        
-    # (3) block at tx inclusion
+    # 3) block at tx inclusion
     try:
         block = w3.eth.get_block(rcpt.blockNumber)
     except Exception as e:
-        print(f"❌ Failed to fetch tx block: {e}")
+        print(f"❌ Failed to fetch tx block: {e}", file=sys.stderr)
         sys.exit(2)
-          miner_address = block.get("miner", "N/A")  # ✅ Capture miner/validator
 
-    # (4) latest for confirmations
+    miner_address = getattr(block, "miner", None) or getattr(block, "validator", None) or "N/A"
+
+    # Confirmations
     latest = w3.eth.block_number
     confirmations = max(0, int(latest) - int(rcpt.blockNumber))
 
-    # Prefer EIP-1559 effectiveGasPrice if available
+    # Gas limit and efficiency
+    gas_limit = getattr(tx, "gas", None)
+    gas_efficiency = (rcpt.gasUsed / gas_limit * 100.0) if gas_limit else None
+
+    # Prefer EIP-1559 effectiveGasPrice, fall back to tx.gasPrice
     gas_price_wei = getattr(rcpt, "effectiveGasPrice", None)
     if gas_price_wei is None:
-        # Fallback (legacy clients)
-        try:
-            # Some clients include 'gasPrice' in receipt; if not, assume 0
-            gas_price_wei = int(rcpt.get("gasPrice", 0))  # type: ignore[attr-defined]
-        except Exception:
-            gas_price_wei = 0
+        gas_price_wei = getattr(tx, "gasPrice", 0) or 0
 
-    total_fee_wei = int(rcpt.gasUsed) * int(gas_price_wei or 0)
-    
-      # Get miner/validator address
-    miner_address = getattr(block, "miner", "N/A")
+    total_fee_wei = int(rcpt.gasUsed) * int(gas_price_wei)
+    base_fee_wei = int(getattr(block, "baseFeePerGas", 0) or 0)
 
-    
+    from_addr = getattr(tx, "from", None) or "N/A"
+    to_addr = getattr(tx, "to", None)
+
     return {
-        "miner": miner_address,
-         "gasEfficiency": round(gas_efficiency, 2) if gas_efficiency is not None else None,
         "chainId": int(chain_id),
-        "miner": miner_address,
         "network": network_name(int(chain_id)),
-               "txHash": tx_hash,
-        "from": rcpt.get("from", "N/A"),
-        "to": rcpt.get("to", "N/A"),
+        "txHash": tx_hash,
+        "from": from_addr,
+        "to": to_addr,
         "status": int(getattr(rcpt, "status", 0)),
-
         "blockNumber": int(rcpt.blockNumber),
         "timestamp": int(block.timestamp),
         "confirmations": confirmations,
+        "miner": miner_address,
         "gasUsed": int(rcpt.gasUsed),
-        "gasPriceGwei": float(Web3.from_wei(gas_price_wei or 0, "gwei")),
+        "gasEfficiency": round(gas_efficiency, 2) if gas_efficiency is not None else None,
+        "gasPriceGwei": float(Web3.from_wei(gas_price_wei, "gwei")),
+        "baseFeeAtTxGwei": float(Web3.from_wei(base_fee_wei, "gwei")),
         "totalFeeEth": float(Web3.from_wei(total_fee_wei, "ether")),
-        "baseFeeAtTxGwei": float(Web3.from_wei(block.get("baseFeePerGas", 0), "gwei")),
     }
+
 
 # ---------- CLI ----------
 def parse_args() -> argparse.Namespace:
