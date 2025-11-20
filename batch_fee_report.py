@@ -50,11 +50,16 @@ def connect(rpc: str) -> Web3:
     """
     start = time.time()
     w3 = Web3(Web3.HTTPProvider(rpc, request_kwargs={"timeout": 25}))
-     if not w3.is_connected():
+    if not w3.is_connected():
         print(f"❌ Failed to connect to RPC: {rpc}", file=sys.stderr)
         sys.exit(1)
-    print(f"⚡ Connected to {network_name(w3.eth.chain_id)} (chainId {w3.eth.chain_id}) in {time.time()-start:.2f}s")
+    print(
+        f"⚡ Connected to {network_name(w3.eth.chain_id)} "
+        f"(chainId {w3.eth.chain_id}) in {time.time() - start:.2f}s",
+        file=sys.stderr,
+    )
     return w3
+
 
 def is_tx_hash(s: str) -> bool:
     if not isinstance(s, str):
