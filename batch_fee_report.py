@@ -237,6 +237,12 @@ def summarize_tx(w3: Web3, tx_hash: str, block_cache: Dict[int, Any], latest_blo
 
 
 def to_csv(rows: List[Dict[str, Any]], out_path: str | None):
+    """
+    Write transaction summaries to CSV.
+
+    If out_path is None, writes to stdout; otherwise writes to the given file
+    and logs the path to stderr.
+    """
     if not rows:
         print("⚠️  No rows to write.", file=sys.stderr)
         return
