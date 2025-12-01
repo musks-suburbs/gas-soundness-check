@@ -251,6 +251,6 @@ print(f"🕒 Timestamp: {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC")
 
 
     print(f"⏱️  Elapsed: {time.time() - t0:.2f}s")
-
+print("✅ Script executed successfully without errors.")
 if __name__ == "__main__":
     main()
