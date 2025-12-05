@@ -198,25 +198,46 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-        print(f"📅 Fee-Profile run started at UTC: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}")
-    print(f"⚙️ Using RPC endpoint: {args.rpc}")
-        if args.blocks <= 0 or args.step <= 0:
+
+    # High-level run info (goes to stderr so stdout can be JSON/human summary)
+    print(
+        f"📅 Fee-Profile run started at UTC: "
+        f"{time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())}",
+        file=sys.stderr,
+    )
+    print(f"⚙️ Using RPC endpoint: {args.rpc}", file=sys.stderr)
+
+    # Basic validation
+    if args.blocks <= 0 or args.step <= 0:
         print("❌ --blocks and --step must be > 0", file=sys.stderr)
-                if args.blocks > 100_000:
-        print("⚠️  --blocks is very large; this may take a long time.", file=sys.stderr)
         sys.exit(1)
-        # ✅ Prevent huge block scans that could overload the RPC
+
+    # Very large scan guard
+    if args.blocks > 100_000:
+        print(
+            "❌ --blocks is extremely large (> 100000); refusing to run to avoid RPC abuse.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    # Soft limit: clamp to 5000
     if args.blocks > 5000:
-        print("⚠️  Limiting --blocks to 5000 to avoid excessive RPC load.")
+        print(
+            "⚠️  Limiting --blocks to 5000 to avoid excessive RPC load.",
+            file=sys.stderr,
+        )
         args.blocks = 5000
 
-
-          w3 = connect(args.rpc)
+    w3 = connect(args.rpc)
     result = analyze(w3, args.blocks, args.step, args.head)
-    if result["sampledBlocks"] == 0:
-        print("⚠️  No blocks were sampled. Check --blocks/--step and head range.", file=sys.stderr)
 
-      if args.json:
+    if result["sampledBlocks"] == 0:
+        print(
+            "⚠️  No blocks were sampled. Check --blocks/--step and head range.",
+            file=sys.stderr,
+        )
+
+    if args.json:
         payload = {
             "mode": "fee_profile",
             "network": result["network"],
@@ -227,30 +248,49 @@ def main() -> None:
         print(json.dumps(payload, indent=2, sort_keys=True))
         return
 
-
-    print(f"🌐 {result['network']} (chainId {result['chainId']})  head={result['head']}")
-    print(f"📦 Scanned ~{result['sampledBlocks']} blocks over last {result['blockSpan']} (step={result['step']}) in {result['timingSec']}s") 
+    # Human-readable summary
+    print(
+        f"🌐 {result['network']} (chainId {result['chainId']})  head={result['head']}"
+    )
+    print(
+        f"📦 Scanned ~{result['sampledBlocks']} blocks over last "
+        f"{result['blockSpan']} (step={result['step']}) in {result['timingSec']}s"
+    )
     bf = result["baseFeeGwei"]
     ep = result["effectivePriceGwei"]
     tp = result["tipGweiApprox"]
-    print(f"📊 Sampled transactions: effective={ep['count']}  tip={tp['count']}")
+    print(
+        f"📊 Sampled transactions: effective={ep['count']}  tip={tp['count']}"
+    )
     print(f"🕒 Average Block Time: {result['avgBlockTimeSec']} seconds")
-    print(f"🎯 Gas target ratio: {(block.gasUsed / (block.gasLimit / 2)) * 100:.1f}% of target")
-    print(f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  min={bf['min']}  max={bf['max']}")
-    print(f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  min={ep['min']}  max={ep['max']}  (n={ep['count']})")
-        print(
-        f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  min={tp['min']}  max={tp['max']}  "
+    print(
+        f"⛽ Base Fee (Gwei):   p50={bf['p50']}  p95={bf['p95']}  "
+        f"min={bf['min']}  max={bf['max']}"
+    )
+    print(
+        f"💵 Effective Price:   p50={ep['p50']}  p95={ep['p95']}  "
+        f"min={ep['min']}  max={ep['max']}  (n={ep['count']})"
+    )
+    print(
+        f"🎁 Priority Tip ~:    p50={tp['p50']}  p95={tp['p95']}  "
+        f"min={tp['min']}  max={tp['max']}  "
         f"(n={tp['count']}, zero={tp.get('countZero', 0)})"
     )
 
-    # New: show share of zero-tip transactions
+    # Show share of zero-tip txs
     if tp["count"] > 0:
         zero_tip_pct = tp.get("countZero", 0) / tp["count"] * 100.0
         print(f"🎯 Zero-tip share: {zero_tip_pct:.1f}% of sampled txs")
 
-    print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
+    print(
+        "ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; "
+        "legacy approximates tip = gasPrice - baseFee."
+    )
 
-    print(f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
+    print(
+        f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC"
+    )
+
 
 if __name__ == "__main__":
     # CLI entrypoint
