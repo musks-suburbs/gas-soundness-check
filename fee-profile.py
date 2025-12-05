@@ -18,7 +18,7 @@ from typing import Dict, List, Tuple, Optional
 from statistics import median
 from web3 import Web3
 
-
+__version__ = "0.1.0"
 
 DEFAULT_RPC = os.getenv("RPC_URL", "https://mainnet.infura.io/v3/your_api_key")
 DEFAULT_BLOCKS = int(os.getenv("FEE_PROFILE_BLOCKS", "300"))
@@ -186,11 +186,15 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_STEP,
         help="Sample every Nth block for speed",
     )
-    ap.add_argument("--json", action="store_true", help="Output JSON only")
-    ap.add_argument(
+     ap.add_argument(
         "--head",
         type=int,
         help="Use this block number as the head instead of the latest",
+    )
+    ap.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
     )
     return ap.parse_args()
 
