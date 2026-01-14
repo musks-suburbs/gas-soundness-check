@@ -126,6 +126,7 @@ def analyze(
     if len(basefees) >= 2 and head > start:
         first_block = w3.eth.get_block(head)
         last_block = w3.eth.get_block(start)
+        gas_limit = int(block.get("gasLimit") or 0) or 1  # avoid div/zero
         time_diff = first_block.timestamp - last_block.timestamp
         block_time_avg = max(0.0, time_diff / (head - start))
     else:
