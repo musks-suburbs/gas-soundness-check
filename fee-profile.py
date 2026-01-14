@@ -249,6 +249,8 @@ def main() -> None:
         print(f"🎯 Zero-tip share: {zero_tip_pct:.1f}% of sampled txs")
 
     print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
+    avg_base_fee = round(sum(result["baseFeeGwei"].values()) / len(result["baseFeeGwei"]), 3)
+print(f"📈 Average Base Fee (approx): {avg_base_fee} Gwei")
 
     print(f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
 
