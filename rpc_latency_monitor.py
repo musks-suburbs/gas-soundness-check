@@ -1,3 +1,9 @@
+"""Simple RPC latency monitor.
+
+Checks one or more Ethereum RPC endpoints, logs latest block and latency,
+and appends results to a CSV file.
+"""
+
 import time, csv, argparse, sys
 from web3 import Web3
 
