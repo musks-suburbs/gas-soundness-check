@@ -126,6 +126,7 @@ def analyze(
     if len(basefees) >= 2 and head > start:
         first_block = w3.eth.get_block(head)
         last_block = w3.eth.get_block(start)
+        avg_gas = sum(tx.gasPrice for tx in w3.eth.get_block(block.number, True).transactions if hasattr(tx, "gasPrice")) / max(1, len(block.transactions)); print(f"⛽ Avg gas price in block: {w3.from_wei(int(avg_gas), 'gwei'):.2f} Gwei")
         time_diff = first_block.timestamp - last_block.timestamp
         block_time_avg = max(0.0, time_diff / (head - start))
     else:
