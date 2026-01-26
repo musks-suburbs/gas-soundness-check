@@ -125,6 +125,7 @@ def analyze(
     # Estimate average block time
     if len(basefees) >= 2 and head > start:
         first_block = w3.eth.get_block(head)
+        print(f"📦 Transactions in block: {len(block.get('transactions', []))}")
         last_block = w3.eth.get_block(start)
         time_diff = first_block.timestamp - last_block.timestamp
         block_time_avg = max(0.0, time_diff / (head - start))
