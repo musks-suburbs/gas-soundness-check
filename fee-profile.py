@@ -249,6 +249,9 @@ def main() -> None:
         print(f"🎯 Zero-tip share: {zero_tip_pct:.1f}% of sampled txs")
 
     print("ℹ️  Tip for EIP-1559 uses tx.maxPriorityFeePerGas; legacy approximates tip = gasPrice - baseFee.")
+if result["effectivePriceGwei"]["count"] < 50:
+    print("⚠️  Warning: Low sample size — results may be inaccurate.")
+
 
     print(f"\n🕒 Completed at: {time.strftime('%Y-%m-%d %H:%M:%S', time.gmtime())} UTC")
 
