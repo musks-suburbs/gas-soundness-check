@@ -13,6 +13,12 @@ import argparse
 from typing import Dict, Any, Iterable, List
 
 from web3 import Web3
+def progress_bar(current: int, total: int, bar_length: int = 30):
+    """Render a simple text progress bar."""
+    filled_length = int(bar_length * current // total)
+    bar = "█" * filled_length + "-" * (bar_length - filled_length)
+    percent = (current / total) * 100
+    print(f"\rProgress: |{bar}| {percent:.1f}% ({current}/{total})", end="", flush=True)
 
 __version__ = "0.1.0"
 
